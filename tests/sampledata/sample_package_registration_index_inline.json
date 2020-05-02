@@ -1,0 +1,304 @@
+{
+    "@id": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/index.json",
+    "@type": [
+        "catalog:CatalogRoot",
+        "PackageRegistration",
+        "catalog:Permalink"
+    ],
+    "commitId": "8743fe3e-1a48-4b14-b891-944671b95aa9",
+    "commitTimeStamp": "2020-04-17T14:45:08.8090094+00:00",
+    "count": 1,
+    "items": [
+        {
+            "@id": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/index.json#page/2.2.0/3.1.1",
+            "@type": "catalog:CatalogPage",
+            "commitId": "8743fe3e-1a48-4b14-b891-944671b95aa9",
+            "commitTimeStamp": "2020-04-17T14:45:08.8090094+00:00",
+            "count": 4,
+            "items": [
+                {
+                    "@id": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/2.2.0.json",
+                    "@type": "Package",
+                    "commitId": "310da1fa-3845-40a7-9df0-c9a31872da26",
+                    "commitTimeStamp": "2020-02-08T07:07:41.3096861+00:00",
+                    "catalogEntry": {
+                        "@id": "https://api.nuget.org/v3/catalog0/data/2018.11.14.23.32.38/aspnetcore.healthchecks.mysql.2.2.0.json",
+                        "@type": "PackageDetails",
+                        "authors": "Xabaril Contributors",
+                        "dependencyGroups": [
+                            {
+                                "@id": "https://api.nuget.org/v3/catalog0/data/2018.11.14.23.32.38/aspnetcore.healthchecks.mysql.2.2.0.json#dependencygroup/.netstandard2.0",
+                                "@type": "PackageDependencyGroup",
+                                "dependencies": [
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2018.11.14.23.32.38/aspnetcore.healthchecks.mysql.2.2.0.json#dependencygroup/.netstandard2.0/microsoft.extensions.diagnostics.healthchecks",
+                                        "@type": "PackageDependency",
+                                        "id": "Microsoft.Extensions.Diagnostics.HealthChecks",
+                                        "range": "[2.2.0, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/microsoft.extensions.diagnostics.healthchecks/index.json"
+                                    },
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2018.11.14.23.32.38/aspnetcore.healthchecks.mysql.2.2.0.json#dependencygroup/.netstandard2.0/mysqlconnector",
+                                        "@type": "PackageDependency",
+                                        "id": "MySqlConnector",
+                                        "range": "[0.40.4, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/mysqlconnector/index.json"
+                                    }
+                                ],
+                                "targetFramework": ".NETStandard2.0"
+                            }
+                        ],
+                        "description": "HealthChecks.MySql is the health check package for MySQL.",
+                        "iconUrl": "",
+                        "id": "AspNetCore.HealthChecks.MySql",
+                        "language": "",
+                        "licenseExpression": "",
+                        "licenseUrl": "https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE",
+                        "listed": true,
+                        "minClientVersion": "",
+                        "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/2.2.0/aspnetcore.healthchecks.mysql.2.2.0.nupkg",
+                        "projectUrl": "http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks",
+                        "published": "2018-11-14T23:28:06.34+00:00",
+                        "requireLicenseAcceptance": false,
+                        "summary": "",
+                        "tags": [
+                            "HealthChecks",
+                            "HealthCheck",
+                            "Health",
+                            "MySQL"
+                        ],
+                        "title": "",
+                        "version": "2.2.0"
+                    },
+                    "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/2.2.0/aspnetcore.healthchecks.mysql.2.2.0.nupkg",
+                    "registration": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/index.json"
+                },
+                {
+                    "@id": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/3.0.0.json",
+                    "@type": "Package",
+                    "commitId": "310da1fa-3845-40a7-9df0-c9a31872da26",
+                    "commitTimeStamp": "2020-02-08T07:07:41.3096861+00:00",
+                    "catalogEntry": {
+                        "@id": "https://api.nuget.org/v3/catalog0/data/2019.09.24.08.42.54/aspnetcore.healthchecks.mysql.3.0.0.json",
+                        "@type": "PackageDetails",
+                        "authors": "Xabaril Contributors",
+                        "dependencyGroups": [
+                            {
+                                "@id": "https://api.nuget.org/v3/catalog0/data/2019.09.24.08.42.54/aspnetcore.healthchecks.mysql.3.0.0.json#dependencygroup/.netstandard2.0",
+                                "@type": "PackageDependencyGroup",
+                                "dependencies": [
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2019.09.24.08.42.54/aspnetcore.healthchecks.mysql.3.0.0.json#dependencygroup/.netstandard2.0/microsoft.extensions.diagnostics.healthchecks",
+                                        "@type": "PackageDependency",
+                                        "id": "Microsoft.Extensions.Diagnostics.HealthChecks",
+                                        "range": "[3.0.0, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/microsoft.extensions.diagnostics.healthchecks/index.json"
+                                    },
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2019.09.24.08.42.54/aspnetcore.healthchecks.mysql.3.0.0.json#dependencygroup/.netstandard2.0/mysqlconnector",
+                                        "@type": "PackageDependency",
+                                        "id": "MySqlConnector",
+                                        "range": "[0.56.0, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/mysqlconnector/index.json"
+                                    }
+                                ],
+                                "targetFramework": ".NETStandard2.0"
+                            }
+                        ],
+                        "description": "HealthChecks.MySql is the health check package for MySQL.",
+                        "iconUrl": "",
+                        "id": "AspNetCore.HealthChecks.MySql",
+                        "language": "",
+                        "licenseExpression": "",
+                        "licenseUrl": "https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE",
+                        "listed": true,
+                        "minClientVersion": "",
+                        "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/3.0.0/aspnetcore.healthchecks.mysql.3.0.0.nupkg",
+                        "projectUrl": "http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks",
+                        "published": "2019-09-24T08:40:20.317+00:00",
+                        "requireLicenseAcceptance": false,
+                        "summary": "",
+                        "tags": [
+                            "HealthChecks",
+                            "HealthCheck",
+                            "Health",
+                            "MySQL"
+                        ],
+                        "title": "",
+                        "version": "3.0.0"
+                    },
+                    "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/3.0.0/aspnetcore.healthchecks.mysql.3.0.0.nupkg",
+                    "registration": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/index.json"
+                },
+                {
+                    "@id": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/3.1.0.json",
+                    "@type": "Package",
+                    "commitId": "c90db13b-4dcf-4107-a1e1-00cbaa3d2026",
+                    "commitTimeStamp": "2020-04-09T14:55:50.0441369+00:00",
+                    "catalogEntry": {
+                        "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.09.14.55.38/aspnetcore.healthchecks.mysql.3.1.0.json",
+                        "@type": "PackageDetails",
+                        "authors": "Xabaril Contributors",
+                        "dependencyGroups": [
+                            {
+                                "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.09.14.55.38/aspnetcore.healthchecks.mysql.3.1.0.json#dependencygroup/.netstandard2.1",
+                                "@type": "PackageDependencyGroup",
+                                "dependencies": [
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.09.14.55.38/aspnetcore.healthchecks.mysql.3.1.0.json#dependencygroup/.netstandard2.1/microsoft.extensions.diagnostics.healthchecks",
+                                        "@type": "PackageDependency",
+                                        "id": "Microsoft.Extensions.Diagnostics.HealthChecks",
+                                        "range": "[3.1.3, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/microsoft.extensions.diagnostics.healthchecks/index.json"
+                                    },
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.09.14.55.38/aspnetcore.healthchecks.mysql.3.1.0.json#dependencygroup/.netstandard2.1/mysqlconnector",
+                                        "@type": "PackageDependency",
+                                        "id": "MySqlConnector",
+                                        "range": "[0.56.0, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/mysqlconnector/index.json"
+                                    }
+                                ],
+                                "targetFramework": ".NETStandard2.1"
+                            }
+                        ],
+                        "description": "HealthChecks.MySql is the health check package for MySQL.",
+                        "iconUrl": "",
+                        "id": "AspNetCore.HealthChecks.MySql",
+                        "language": "",
+                        "licenseExpression": "",
+                        "licenseUrl": "https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE",
+                        "listed": true,
+                        "minClientVersion": "",
+                        "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/3.1.0/aspnetcore.healthchecks.mysql.3.1.0.nupkg",
+                        "projectUrl": "http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks",
+                        "published": "2020-04-09T14:53:04.73+00:00",
+                        "requireLicenseAcceptance": false,
+                        "summary": "",
+                        "tags": [
+                            "HealthChecks",
+                            "HealthCheck",
+                            "Health",
+                            "MySQL"
+                        ],
+                        "title": "",
+                        "version": "3.1.0"
+                    },
+                    "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/3.1.0/aspnetcore.healthchecks.mysql.3.1.0.nupkg",
+                    "registration": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/index.json"
+                },
+                {
+                    "@id": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/3.1.1.json",
+                    "@type": "Package",
+                    "commitId": "8743fe3e-1a48-4b14-b891-944671b95aa9",
+                    "commitTimeStamp": "2020-04-17T14:45:08.8090094+00:00",
+                    "catalogEntry": {
+                        "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.17.14.44.46/aspnetcore.healthchecks.mysql.3.1.1.json",
+                        "@type": "PackageDetails",
+                        "authors": "Xabaril Contributors",
+                        "dependencyGroups": [
+                            {
+                                "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.17.14.44.46/aspnetcore.healthchecks.mysql.3.1.1.json#dependencygroup/.netstandard2.0",
+                                "@type": "PackageDependencyGroup",
+                                "dependencies": [
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.17.14.44.46/aspnetcore.healthchecks.mysql.3.1.1.json#dependencygroup/.netstandard2.0/microsoft.extensions.diagnostics.healthchecks",
+                                        "@type": "PackageDependency",
+                                        "id": "Microsoft.Extensions.Diagnostics.HealthChecks",
+                                        "range": "[3.1.3, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/microsoft.extensions.diagnostics.healthchecks/index.json"
+                                    },
+                                    {
+                                        "@id": "https://api.nuget.org/v3/catalog0/data/2020.04.17.14.44.46/aspnetcore.healthchecks.mysql.3.1.1.json#dependencygroup/.netstandard2.0/mysqlconnector",
+                                        "@type": "PackageDependency",
+                                        "id": "MySqlConnector",
+                                        "range": "[0.56.0, )",
+                                        "registration": "https://api.nuget.org/v3/registration5-semver1/mysqlconnector/index.json"
+                                    }
+                                ],
+                                "targetFramework": ".NETStandard2.0"
+                            }
+                        ],
+                        "description": "HealthChecks.MySql is the health check package for MySQL.",
+                        "iconUrl": "",
+                        "id": "AspNetCore.HealthChecks.MySql",
+                        "language": "",
+                        "licenseExpression": "",
+                        "licenseUrl": "https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/blob/master/LICENSE",
+                        "listed": true,
+                        "minClientVersion": "",
+                        "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/3.1.1/aspnetcore.healthchecks.mysql.3.1.1.nupkg",
+                        "projectUrl": "http://github.com/xabaril/AspNetCore.Diagnostics.HealthChecks",
+                        "published": "2020-04-17T14:42:33.343+00:00",
+                        "requireLicenseAcceptance": false,
+                        "summary": "",
+                        "tags": [
+                            "HealthChecks",
+                            "HealthCheck",
+                            "Health",
+                            "MySQL"
+                        ],
+                        "title": "",
+                        "version": "3.1.1"
+                    },
+                    "packageContent": "https://api.nuget.org/v3-flatcontainer/aspnetcore.healthchecks.mysql/3.1.1/aspnetcore.healthchecks.mysql.3.1.1.nupkg",
+                    "registration": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/index.json"
+                }
+            ],
+            "parent": "https://api.nuget.org/v3/registration5-semver1/aspnetcore.healthchecks.mysql/index.json",
+            "lower": "2.2.0",
+            "upper": "3.1.1"
+        }
+    ],
+    "@context": {
+        "@vocab": "http://schema.nuget.org/schema#",
+        "catalog": "http://schema.nuget.org/catalog#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "items": {
+            "@id": "catalog:item",
+            "@container": "@set"
+        },
+        "commitTimeStamp": {
+            "@id": "catalog:commitTimeStamp",
+            "@type": "xsd:dateTime"
+        },
+        "commitId": {
+            "@id": "catalog:commitId"
+        },
+        "count": {
+            "@id": "catalog:count"
+        },
+        "parent": {
+            "@id": "catalog:parent",
+            "@type": "@id"
+        },
+        "tags": {
+            "@id": "tag",
+            "@container": "@set"
+        },
+        "reasons": {
+            "@container": "@set"
+        },
+        "packageTargetFrameworks": {
+            "@id": "packageTargetFramework",
+            "@container": "@set"
+        },
+        "dependencyGroups": {
+            "@id": "dependencyGroup",
+            "@container": "@set"
+        },
+        "dependencies": {
+            "@id": "dependency",
+            "@container": "@set"
+        },
+        "packageContent": {
+            "@type": "@id"
+        },
+        "published": {
+            "@type": "xsd:dateTime"
+        },
+        "registration": {
+            "@type": "@id"
+        }
+    }
+}

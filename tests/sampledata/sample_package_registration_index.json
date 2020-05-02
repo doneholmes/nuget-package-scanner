@@ -1,0 +1,109 @@
+{
+    "@id": "https://api.nuget.org/v3/registration5-semver1/awssdk.dynamodbv2/index.json",
+    "@type": [
+        "catalog:CatalogRoot",
+        "PackageRegistration",
+        "catalog:Permalink"
+    ],
+    "commitId": "c72357bf-13b0-48fe-986d-38b83f48dbae",
+    "commitTimeStamp": "2020-04-17T19:40:58.5189042+00:00",
+    "count": 5,
+    "items": [
+        {
+            "@id": "https://api.nuget.org/v3/registration5-semver1/awssdk.dynamodbv2/page/3.0.0-preview/3.3.4.16.json",
+            "@type": "catalog:CatalogPage",
+            "commitId": "bb423113-2d04-4fb8-b84e-fab90c77827e",
+            "commitTimeStamp": "2020-02-08T03:28:15.108935+00:00",
+            "count": 64,
+            "lower": "3.0.0-preview",
+            "upper": "3.3.4.16"
+        },
+        {
+            "@id": "https://api.nuget.org/v3/registration5-semver1/awssdk.dynamodbv2/page/3.3.4.17/3.3.17.1.json",
+            "@type": "catalog:CatalogPage",
+            "commitId": "bb423113-2d04-4fb8-b84e-fab90c77827e",
+            "commitTimeStamp": "2020-02-08T03:28:15.108935+00:00",
+            "count": 64,
+            "lower": "3.3.4.17",
+            "upper": "3.3.17.1"
+        },
+        {
+            "@id": "https://api.nuget.org/v3/registration5-semver1/awssdk.dynamodbv2/page/3.3.17.2/3.3.101.41.json",
+            "@type": "catalog:CatalogPage",
+            "commitId": "bb423113-2d04-4fb8-b84e-fab90c77827e",
+            "commitTimeStamp": "2020-02-08T03:28:15.108935+00:00",
+            "count": 64,
+            "lower": "3.3.17.2",
+            "upper": "3.3.101.41"
+        },
+        {
+            "@id": "https://api.nuget.org/v3/registration5-semver1/awssdk.dynamodbv2/page/3.3.101.42/3.3.104.8.json",
+            "@type": "catalog:CatalogPage",
+            "commitId": "1a43db8b-3338-4590-8247-4a70148a9ed8",
+            "commitTimeStamp": "2020-02-08T03:28:36.8890521+00:00",
+            "count": 64,
+            "lower": "3.3.101.42",
+            "upper": "3.3.104.8"
+        },
+        {
+            "@id": "https://api.nuget.org/v3/registration5-semver1/awssdk.dynamodbv2/page/3.3.104.9/3.5.0-beta.json",
+            "@type": "catalog:CatalogPage",
+            "commitId": "c72357bf-13b0-48fe-986d-38b83f48dbae",
+            "commitTimeStamp": "2020-04-17T19:40:58.5189042+00:00",
+            "count": 49,
+            "lower": "3.3.104.9",
+            "upper": "3.5.0-beta"
+        }
+    ],
+    "@context": {
+        "@vocab": "http://schema.nuget.org/schema#",
+        "catalog": "http://schema.nuget.org/catalog#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "items": {
+            "@id": "catalog:item",
+            "@container": "@set"
+        },
+        "commitTimeStamp": {
+            "@id": "catalog:commitTimeStamp",
+            "@type": "xsd:dateTime"
+        },
+        "commitId": {
+            "@id": "catalog:commitId"
+        },
+        "count": {
+            "@id": "catalog:count"
+        },
+        "parent": {
+            "@id": "catalog:parent",
+            "@type": "@id"
+        },
+        "tags": {
+            "@id": "tag",
+            "@container": "@set"
+        },
+        "reasons": {
+            "@container": "@set"
+        },
+        "packageTargetFrameworks": {
+            "@id": "packageTargetFramework",
+            "@container": "@set"
+        },
+        "dependencyGroups": {
+            "@id": "dependencyGroup",
+            "@container": "@set"
+        },
+        "dependencies": {
+            "@id": "dependency",
+            "@container": "@set"
+        },
+        "packageContent": {
+            "@type": "@id"
+        },
+        "published": {
+            "@type": "xsd:dateTime"
+        },
+        "registration": {
+            "@type": "@id"
+        }
+    }
+}

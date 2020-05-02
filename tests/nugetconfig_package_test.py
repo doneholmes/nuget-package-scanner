@@ -1,5 +1,5 @@
 import unittest
-from nugetconfig import Package as Package
+from nuget import Package as Package
 
 class TestPackage(unittest.TestCase):
 

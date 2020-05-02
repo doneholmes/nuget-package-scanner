@@ -3,10 +3,6 @@ from typing import List
 
 from lxml import etree
 
-import nuget
-import nugetversion
-
-
 class Package:
     """
     Class for accessing nuget package metadata.

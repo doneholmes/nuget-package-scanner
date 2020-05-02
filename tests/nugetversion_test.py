@@ -1,6 +1,6 @@
 import unittest
-import nugetversion
-from nugetversion import VersionPart as VersionPart
+from nuget import version_util as nugetversion
+from nuget import VersionPart as VersionPart
 
 class TestNugetVersion(unittest.TestCase):
 

@@ -1,17 +1,17 @@
 # nuget-package-scanner
 
-nuget-package-scanner is a tool that will query your Github organization for Nuget dependencies in your .Net projects and report on how up-to-date they are. This can be useful for identifying which projects' Nuget dependencies are out of date (and how badly). It can also be useful for identifying how many disperate versions of the same common package is in use across your codebase (*cough*... Newtonsoft.Json...*cough*).
+nuget-package-scanner is a Python module that will query your Github organization for Nuget dependencies in your .Net projects and produce a report on how up-to-date they are. This can be useful for identifying which projects' dependencies are out of date (and how badly). It can also be useful for identifying how many disperate versions of the same common package is in use across your codebase (*cough... Newtonsoft.Json...cough*).
 
-Currently, results are stored to a csv file that can be imported into a spreadsheet or another db that can be used for displaying, sorting, and further analysis.
+Currently, results are saved to a csv file that can be imported into a spreadsheet or another db that can be used for displaying, sorting, and further analysis.
 
-## Install Dependencies
+## Dependencies
 
 * Make sure you have python installed (v3.8+) and added to your `PATH` variable
 * Make sure you have pip installed `python get-pip.py`
 * `pip install requests`
 * `pip install lxml`
 
-## How do I use this?
+## Usage
 
 1. Clone this repo to a local directory
 1. You will need to ensure that you have a Github personal toke available for the github search to work properly.
@@ -21,16 +21,15 @@ Currently, results are stored to a csv file that can be imported into a spreadsh
 1. `python nuget-package-scanner`
 1. Follow the prompt(s)
 1. Import the exported .csv into google sheets (or another spreadsheet app)
-    * The *\<version part\> Release Behind* columns are useful to highlight and sort out of date packages in projects
 
 ## Basic Application Flow
 
-1. Search Github org for all Nuget server configurations to detect all sources used outside of nuget.org
-1. Search Github org for all .Net Core and .Net Framework project configurations that contain refrences to Nuget package dependencies.
+1. Search the specified Github org for all Nuget server configurations (*nuget.config*) to detect and additional Nuget Server sources.(Nuget.org will be included by default) 
+1. Search the specified Github org for all .Net Core and .Net Framework project configurations that contain refrences to Nuget package dependencies.
 1. Cycle through each Nuget Package discovered
     1. Cycle through each Nuget Server (preferring nuget.org) to find where the package lives
     1. Use the appropriate Nuget Server to fetch registration information for the package
-1. Display Report organized by github repo -> .Net project -> package
+1. Generate and save CSV
 
 ## Data Fetched and Caculated in the CSV
 

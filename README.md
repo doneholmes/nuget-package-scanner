@@ -22,7 +22,7 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
 1. Follow the prompt(s)
 1. Import the exported .csv into google sheets (or another spreadsheet app)
 
-## Data Fetched and Caculated in the CSV
+## Report Data
 
 - Github
    - **Repo Name** - The name of the github repository that the package configuration was discovered

@@ -24,12 +24,12 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
 
 ## Report Data
 
-- Github
+- From Github
    - **Repo Name** - The name of the github repository that the package configuration was discovered
    - **Container Path** - The file path to the package configuration within the repository
    - **Name** - The name of the package config container that the package was listed in. This will be either a .Net Framework *packages.config* or a .Net core *.csproj* file.
    - **Referenced Version** - The version referenced in the package container (if there was a version specified, some core MSFT libraries don't specify)
-- Nuget Server
+- From Nuget Server
    - **Date** - The date the **Referenced Version** was published to the Nuget Server
    - **Latest Release** - The latest full-release version of the package that has been published to the Nuget Server
    - **Latest Release Date** - The date the **Latest Release** was published to the Nuget Server

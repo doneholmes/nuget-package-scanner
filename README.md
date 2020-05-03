@@ -43,7 +43,7 @@ nuget-package-scanner is a tool that will query your Github organization for Nug
 
 ## Why did you write your own github client?
 
-I originally tried to make use of PyGithub. I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. If I need to support any more complicated use cases, I would look at switching back to PyGithub. This also gave me a chance to familiarize a bit more with the Github API.
+I originally tried to make use of PyGithub. I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. If I need to support any more complicated use cases, I would look at switching back to PyGithub. This also gave me a chance to familiarize a bit more with the Github API. I wanted to usd the Github GraphQL API for this, but it doesn't support code search as of yet.
 
 ## Why did you write this in Python? Nuget only supports .Net.
 

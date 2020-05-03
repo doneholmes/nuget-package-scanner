@@ -23,7 +23,7 @@ class Nuget:
             value: Name
         """      
         self._configs = configs
-        self._clients_cache = [] # type: List[nuget.Nuget]
+        self._clients_cache = [] # type: List[NugetServer]
         self._package_cache = {}
     
     @property

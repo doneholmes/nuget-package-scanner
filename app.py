@@ -28,7 +28,7 @@ def write_to_csv(package_containers: List[PackageContainer], csv_location: str):
         columns = [
             "Repo Name", "Container Path",  "Name", "Referenced Version", "Date", 
             "Latest Release", "Latest Release Date", "Latest Package", 
-            "Latest Version Date", "Major Release Behind", "Minor Release Behind",
+            "Latest Package Date", "Major Release Behind", "Minor Release Behind",
             "Patch Release Behind", "Available Version Count", "Link"
         ]
         w.writerow(columns)

@@ -51,6 +51,14 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
    - **Patch Release Behind** - The number of *patch* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version and *minor* version
    - **Available Version Count** - The total number of versions of the package that are published to the Nuget Server.
 
+## Why did you write your own github client?
+
+I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithub). I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. This also gave me a chance to familiarize a bit more with the Github API. I wanted to usd the [Github GraphQL API](https://developer.github.com/v4/) for this, but it doesn't support code search as of yet. If I need to support any more-complicated use cases, I would look at switching back to PyGithub.
+
+## Why did you write this in Python? Nuget only supports .Net.
+
+I wanted to learn new stuff and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.
+
 ## TODOs
 - More resilliancy in web call timeout errors. Currently, any timeout crashes things.
 - Build a visual front end consumer
@@ -61,11 +69,3 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
     - Github Search API Rate Limiting: https://developer.github.com/v3/search/#rate-limit
 - Optimizing json object scanning algorhithms. It's currently a very simple brute force approach. This may be a lot of work for little gain.
 - Possibly break out the nuget module into a stand-alone Python package. I'm not sure if there's any use beyond basic GET functionality.
-
-## Why did you write your own github client?
-
-I originally tried to make use of PyGithub. I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. If I need to support any more complicated use cases, I would look at switching back to PyGithub. This also gave me a chance to familiarize a bit more with the Github API. I wanted to usd the Github GraphQL API for this, but it doesn't support code search as of yet.
-
-## Why did you write this in Python? Nuget only supports .Net.
-
-Mostly, I'm trying to learn Python. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.

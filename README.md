@@ -22,15 +22,6 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
 1. Follow the prompt(s)
 1. Import the exported .csv into google sheets (or another spreadsheet app)
 
-## Basic Application Flow
-
-1. Search the specified Github org for all Nuget server configurations (*nuget.config*) to detect and additional Nuget Server sources.(Nuget.org will be included by default) 
-1. Search the specified Github org for all .Net Core and .Net Framework project configurations that contain refrences to Nuget package dependencies.
-1. Cycle through each Nuget Package discovered
-    1. Cycle through each Nuget Server (preferring nuget.org) to find where the package lives
-    1. Use the appropriate Nuget Server to fetch registration information for the package
-1. Generate and save CSV
-
 ## Data Fetched and Caculated in the CSV
 
 - Github
@@ -50,6 +41,15 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
    - **Minor Release Behind** - The number of *minor* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version
    - **Patch Release Behind** - The number of *patch* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version and *minor* version
    - **Available Version Count** - The total number of versions of the package that are published to the Nuget Server.
+
+## Basic Application Flow
+
+1. Search the specified Github org for all Nuget server configurations (*nuget.config*) to detect and additional Nuget Server sources.(Nuget.org will be included by default) 
+1. Search the specified Github org for all .Net Core and .Net Framework project configurations that contain refrences to Nuget package dependencies.
+1. Cycle through each Nuget Package discovered
+    1. Cycle through each Nuget Server (preferring nuget.org) to find where the package lives
+    1. Use the appropriate Nuget Server to fetch registration information for the package
+1. Generate and save CSV
 
 ## Why did you write your own github client?
 

@@ -2,9 +2,15 @@
 
 nuget-package-scanner is a tool that will query your Github organization for Nuget dependencies in your .Net projects and report on how up-to-date they are.
 
+## Install Dependencies
+
+* Make sure you have python installed (v3.8+) and added to your `PATH` variable
+* Make sure you have pip installed `python get-pip.py`
+* `pip install requests`
+* `pip install lxml`
+
 ## How do I use this?
 
-1. Make sure you have python installed (v3.8+) and added to your `PATH` variable
 1. Clone this repo to a local directory
 1. You will need to ensure that you have a Github personal toke available for the github search to work properly.
     * https://github.com/settings/tokens

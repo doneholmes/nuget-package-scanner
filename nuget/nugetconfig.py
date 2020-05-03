@@ -12,12 +12,21 @@ class Package:
         self.name = name
         self.target_framework = target_framework
         self.version = version
-        self.version_date = ""
+        self.version_date = "" # type: datetime
         self.latest_release = "" # includes full release only   
         self.latest_release_date = ""
         self.latest_version = "" # includes prerelease and other builds
-        self.latest_version_date = ""
+        self.latest_version_date = ""             
+        self.major_releases_behind = 0
+        self.minor_releases_behind = 0
+        self.patch_releases_behind = 0
+        self.available_version_count = 0
         self.source = ""
+        self.details_url = ""
+    
+    def set_details_url(self, template_uri: str):
+        if template_uri:
+            self.details_url = template_uri.replace('{id}',str.lower(self.name)).replace('{version}', self.version)
 
     def __eq__(self, other):
         return self.name == other.name and self.version == other.version and self.target_framework == other.target_framework

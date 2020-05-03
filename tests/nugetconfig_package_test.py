@@ -36,6 +36,24 @@ class TestPackage(unittest.TestCase):
         a = Package("stuffs", "versionstuffs")
         b = Package("stuffs", "versionstuffs")
         self.assertTrue(a==b)
+    
+    def test_set_details_url(self):
+        name = "thingy"
+        version = "1.1.1"
+        uri = "https://www.nuget.org/packages/{id}/{version}?_src=template"
+        p = Package(name,version)
+        p.set_details_url(uri)
+        self.assertEqual(p.details_url,f"https://www.nuget.org/packages/{name}/{version}?_src=template")
+
+    def test_set_details_url_null(self):
+        name = "thingy"
+        version = "1.1.1"
+        uri = ""
+        p = Package(name,version)
+        p.set_details_url(uri)
+        self.assertFalse(p.details_url)
+
+
             
 if __name__ == '__main__':
     unittest.main()

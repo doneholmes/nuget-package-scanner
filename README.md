@@ -23,7 +23,7 @@ nuget-package-scanner is a tool that will query your Github organization for Nug
 1. Display Report organized by github repo -> .Net project -> package
 
 ## TODOs
-- Output to a csv or some other storage format that can be used for reporting
+- More resilliancy in web call timeout errors. Currently, any timeout crashes things.
 - Build a visual front end consumer
 - Implement async web requests in nuget module. Not strictly necessary, but would likely speed this up a good bit. Most of the time is currently spent waiting on web requests to complete and there is little reason for that to happen serially.
     - https://docs.aiohttp.org/en/stable/

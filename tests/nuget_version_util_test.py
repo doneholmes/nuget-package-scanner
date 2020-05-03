@@ -59,6 +59,19 @@ class TestNugetVersion(unittest.TestCase):
         self.assertTrue(nugetversion.is_newer_release("3.3.105.24","3.3.105.999-beta"))
         self.assertTrue(nugetversion.is_newer_release("3.3.105.24","3.3.105.999"))
         self.assertTrue(nugetversion.is_newer_release("1.2.3","3.0.0"))
+    
+    def test_get_version_count_behind_basic(self):
+        result = nugetversion.get_version_count_behind("1.2.3","2.0.0")        
+        self.assertEqual(list(result.values()), [1,0,0])
+
+        result = nugetversion.get_version_count_behind("2.1.1","2.1.1")
+        self.assertEqual(list(result.values()), [0,0,0])
+
+        result = nugetversion.get_version_count_behind("1.99.1","1.299.0")
+        self.assertEqual(list(result.values()), [0,200,0])
+
+        result = nugetversion.get_version_count_behind("1.1.1","1.1.009")
+        self.assertEqual(list(result.values()), [0,0,8])     
             
 if __name__ == '__main__':
     unittest.main()

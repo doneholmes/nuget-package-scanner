@@ -1,3 +1,4 @@
+import csv
 import logging
 import os
 import sys
@@ -9,6 +10,7 @@ import nuget
 from nuget import Nuget
 from nuget import NetCoreProject
 from nuget import PackageConfig
+from nuget import PackageContainer
 
 
 def enable_console_logging(level: int = logging.INFO):   
@@ -17,18 +19,35 @@ def enable_console_logging(level: int = logging.INFO):
     logger.addHandler(logging.StreamHandler())
     logger.addHandler(logging.FileHandler('last_run.log','w'))
 
-def run(github_org:str, github_token: str = None):
-    start = time.perf_counter()
-    logging.info("Startng test run...")
-    assert isinstance(github_org,str) and github_org, ':param github_org must be a non-empty string.'
-    org = github_org
+def write_to_csv(package_containers: List[PackageContainer], csv_location: str):
+    # just assume that we want this to be easy and create any missing directories in the path    
+    os.makedirs(os.path.dirname(csv_location), exist_ok=True) 
+    with open(csv_location, 'w', newline='') as csvfile:
+        # write over any existing file
+        w = csv.writer(csvfile)
+        columns = [
+            "Repo Name", "Container Path",  "Name", "Referenced Version", "Date", 
+            "Latest Release", "Latest Release Date", "Latest Package", 
+            "Latest Version Date", "Major Release Behind", "Minor Release Behind",
+            "Patch Release Behind", "Available Version Count", "Link"
+        ]
+        w.writerow(columns)
+        for container in package_containers:
+            for package in container.packages:
+                package_columns = [
+                    container.repo, container.path,  package.name, package.version, package.version_date,
+                    package.latest_release, package.latest_release_date, package.latest_version,
+                    package.latest_version_date, package.major_releases_behind,
+                    package.minor_releases_behind, package.patch_releases_behind,
+                    package.available_version_count, package.details_url
+                ]
+                w.writerow(package_columns)    
     
-    # Get token and initialize github search client
-    token = github_token if isinstance(github_token,str) and github_token else os.getenv('GITHUB_TOKEN')
-    assert isinstance(token,str) and token, 'You must either pass this method a non-empty param: github_token or set the GITHUB_TOKEN environment varaible to a non-empty string.'
-    g = githubSearch.GithubClient(token)
 
-    # Find any additional nuget servers that exist 
+def build_org_report(org:str, token: str) -> List[PackageContainer]:
+    
+    # Find any additional nuget servers that exist for this org
+    g = githubSearch.GithubClient(token)
     configs = g.get_unique_nuget_configs(org)
     logging.info(f'Found {len(configs)} Nuget Server(s) to query.')
     for c in configs:
@@ -61,7 +80,24 @@ def run(github_org:str, github_token: str = None):
         logging.info(f'Cache Hit info: {nuget.request_wrapper.get_request.cache_info()}')
         package_containers.append(package_config)
 
-    # Iterate over all pacakges and report    
+    return package_containers
+
+def run(github_org:str, github_token: str = None, output_file: str = None):
+    start = time.perf_counter()
+    logging.info("Startng test run...")
+    assert isinstance(github_org,str) and github_org, ':param github_org must be a non-empty string.'
+    org = github_org
+    
+    # Get token and initialize github search client
+    token = github_token if isinstance(github_token,str) and github_token else os.getenv('GITHUB_TOKEN')
+    assert isinstance(token,str) and token, 'You must either pass this method a non-empty param: github_token or set the GITHUB_TOKEN environment varaible to a non-empty string.'
+
+    package_containers = build_org_report(org, token)
+
+    if output_file:
+        write_to_csv(package_containers, output_file)
+
+    # Iterate over all pacakges and log/display    
     for package_container in package_containers:                                                  
         logging.info(f'Repo:{package_container.repo} Path:{package_container.path}')
         for package in package_container.packages:

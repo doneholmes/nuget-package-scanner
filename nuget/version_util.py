@@ -70,7 +70,35 @@ def is_newer_release(version: str, compare: str) -> bool:
     
     return False # Equal versions
 
-def get_version_part(match: re.Match, version_part: VersionPart, default:int = 0) -> int:
+def get_version_part(match: re.Match, version_part: VersionPart) -> int:
     """Returns the matched version part or the default value provided"""
     value = match.group(version_part.value)
     return int(value) if value else 0
+
+def get_version_count_behind(version: str, compare: str) -> dict:
+    """Returns a dict of VersionPart keys with the values set to count behind"""
+    v_match = pattern.match(version)
+    assert v_match, f':param version [{version}] is not a valid version.'
+    c_match = pattern.match(compare)
+    assert c_match, f':param compare [{compare}] is not a valid version.'
+
+    result = {
+        VersionPart.MAJOR: 0,
+        VersionPart.MINOR: 0,
+        VersionPart.PATCH: 0
+    }
+
+    result[VersionPart.MAJOR] = get_version_part_count_behind(v_match, c_match, VersionPart.MAJOR)
+    if result[VersionPart.MAJOR] == 0:
+        result[VersionPart.MINOR] = get_version_part_count_behind(v_match, c_match, VersionPart.MINOR)
+        if result[VersionPart.MINOR] == 0:
+            result[VersionPart.PATCH] = get_version_part_count_behind(v_match, c_match, VersionPart.PATCH)
+            if result[VersionPart.PATCH] < 0:
+                result[VersionPart.PATCH] = 0
+    return result
+
+def get_version_part_count_behind(match: re.Match, compare_match: re.match, version_part: VersionPart) -> int:
+    """Returns the matched version part or the default value provided"""
+    v = get_version_part(match, version_part)
+    c = get_version_part(compare_match, version_part)    
+    return c - v

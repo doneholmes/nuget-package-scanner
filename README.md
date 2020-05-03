@@ -12,6 +12,8 @@ nuget-package-scanner is a tool that will query your Github organization for Nug
 1. `cd` to the parent directory of this repo
 1. `python nuget-package-scanner`
 1. Follow the prompt(s)
+1. Import the exported .csv into google sheets (or another spreadsheet app)
+    * The *\<version part\> Release Behind* columns are useful to highlight and sort out of date packages in projects
 
 ## Basic Application Flow
 

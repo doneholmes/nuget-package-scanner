@@ -1,6 +1,8 @@
 # nuget-package-scanner
 
-nuget-package-scanner is a tool that will query your Github organization for Nuget dependencies in your .Net projects and report on how up-to-date they are.
+nuget-package-scanner is a tool that will query your Github organization for Nuget dependencies in your .Net projects and report on how up-to-date they are. This can be useful for identifying which projects' Nuget dependencies are out of date (and how badly). It can also be useful for identifying how many disperate versions of the same common package is in use across your codebase (*cough*... Newtonsoft.Json...*cough*).
+
+Currently, results are stored to a csv file that can be imported into a spreadsheet or another db that can be used for displaying, sorting, and further analysis.
 
 ## Install Dependencies
 
@@ -29,6 +31,26 @@ nuget-package-scanner is a tool that will query your Github organization for Nug
     1. Cycle through each Nuget Server (preferring nuget.org) to find where the package lives
     1. Use the appropriate Nuget Server to fetch registration information for the package
 1. Display Report organized by github repo -> .Net project -> package
+
+## Data Fetched and Caculated in the CSV
+
+- Github
+   - **Repo Name** - The name of the github repository that the package configuration was discovered
+   - **Container Path** - The file path to the package configuration within the repository
+   - **Name** - The name of the package config container that the package was listed in. This will be either a .Net Framework *packages.config* or a .Net core *.csproj* file.
+   - **Referenced Version** - The version referenced in the package container (if there was a version specified, some core MSFT libraries don't specify)
+- Nuget Server
+   - **Date** - The date the **Referenced Version** was published to the Nuget Server
+   - **Latest Release** - The latest full-release version of the package that has been published to the Nuget Server
+   - **Latest Release Date** - The date the **Latest Release** was published to the Nuget Server
+   - **Latest Package** - The latest published version of the package (inclusive of pre-release) that has been published to the Nuget Server
+   - **Latest Package Date** - The date the **Latest Package** was published to the Nuget Server
+   - **Link** - If it is a public package on the Nuget Server (e.g nuget.org), this will be a url to the detail page for the package. This link is not likely to be provided by a private package repo
+- Calculated (included for convenience)
+   - **Major Release Behind** - The number of *major* releases behind the referenced package is from the **Latest Release**
+   - **Minor Release Behind** - The number of *minor* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version
+   - **Patch Release Behind** - The number of *patch* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version and *minor* version
+   - **Available Version Count** - The total number of versions of the package that are published to the Nuget Server.
 
 ## TODOs
 - More resilliancy in web call timeout errors. Currently, any timeout crashes things.

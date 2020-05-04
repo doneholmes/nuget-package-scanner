@@ -60,9 +60,10 @@ I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithu
 I wanted to learn new stuff and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.
 
 ## TODOs
+- Shared session(s) in web requests to support connection pooling and boost performance
 - More resilliancy in web call timeout errors. Currently, any timeout crashes things.
 - Build a visual front end consumer
-- Implement async web requests in nuget module. Not strictly necessary, but would likely speed this up a good bit. Most of the time is currently spent waiting on web requests to complete and there is little reason for that to happen serially.
+- Implement async web requests in nuget module. This would speed this up a good bit. Most of the time is currently spent waiting on web requests to complete and there is little reason for that to happen serially.
     - https://docs.aiohttp.org/en/stable/
 - Rate limiting checks on calls to the github api. When searching within a very large github org, there is the possiblity that the search api rate limit budget could be exhausted (currently 30 calls/minute if authenticated)
     - Github Rate Limiting: https://developer.github.com/v3/#rate-limiting

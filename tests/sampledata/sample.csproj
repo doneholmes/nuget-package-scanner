@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <UserSecretsId>31a91331-ec39-4b4d-8fa8-fbf9bc3fb883</UserSecretsId>
+    <UserSecretsId>asdfasfdasdfasdfasdfasdf</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <Configurations>Debug;Release;Staging</Configurations>
   </PropertyGroup>
@@ -29,10 +29,7 @@
     <PackageReference Include="AWSXRayRecorder.Core" Version="2.6.1" />
     <PackageReference Include="AWSXRayRecorder.Handlers.AspNetCore" Version="2.6.1" />
     <PackageReference Include="AWSXRayRecorder.Handlers.AwsSdk" Version="2.7.1" />
-    <PackageReference Include="CacheCow.Server.Core.Mvc" Version="2.4.4" />
-    <PackageReference Include="Curse.Caching" Version="2.0.0" />
-    <PackageReference Include="Curse.Caching.Redis" Version="2.0.1" />
-    <PackageReference Include="Curse.Storage" Version="2.0.1" />
+    <PackageReference Include="CacheCow.Server.Core.Mvc" Version="2.4.4" />    
     <PackageReference Include="FeatureFlagService.Core" Version="1.1.0" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -40,20 +37,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
-    <PackageReference Include="NewRelic.Agent.Api" Version="8.18.241" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="1.68.0" />
-    <PackageReference Include="Waterdeep.Analyzers" Version="1.0.8" />
-    <PackageReference Include="Waterdeep.Authentication" Version="1.1.2" />
-    <PackageReference Include="Waterdeep.Entitlement.Filter" Version="2.0.0" />
-    <PackageReference Include="Waterdeep.DataContracts" Version="2.1.3" />
-    <PackageReference Include="Waterdeep.HtmlPipeline" Version="1.4.0" />
-    <PackageReference Include="Waterdeep.Swagger" Version="2.1.0" />
-    <PackageReference Include="Waterdeep.Versioning" Version="0.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />    
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Waterdeep.Character.Service.BLL\Waterdeep.Character.Service.BLL.csproj" />
+    <ProjectReference Include="..\asdfasfd.csproj" />
   </ItemGroup>
 
   <ItemGroup>

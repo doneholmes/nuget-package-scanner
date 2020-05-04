@@ -65,6 +65,7 @@ I wanted to learn new stuff and Python is new to me. This project seemed like a 
 - Build a visual front end consumer
 - Implement async web requests in nuget module. This would speed this up a good bit. Most of the time is currently spent waiting on web requests to complete and there is little reason for that to happen serially.
     - https://docs.aiohttp.org/en/stable/
+    - Re-writing this in Go would be another interesting option to achieve async and learn something new
 - Rate limiting checks on calls to the github api. When searching within a very large github org, there is the possiblity that the search api rate limit budget could be exhausted (currently 30 calls/minute if authenticated)
     - Github Rate Limiting: https://developer.github.com/v3/#rate-limiting
     - Github Search API Rate Limiting: https://developer.github.com/v3/search/#rate-limit

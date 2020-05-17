@@ -1,4 +1,3 @@
-import nuget.request_wrapper
 import nuget.version_util
 import nuget.date_util
 from .nuget import Nuget

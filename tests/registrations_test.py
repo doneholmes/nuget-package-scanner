@@ -1,12 +1,13 @@
 import unittest
 import json
-import nuget
+from nuget.registrations import Registrations
+import smart_client
 
 class TestRegistrations(unittest.TestCase):
 
     def test_const(self):
         response = json.load(open("./tests/sampledata/sample_nuget_service_index.json", "r"))   
-        registration = nuget.Registrations(response)
+        registration = Registrations(response, smart_client.SmartClient())
         self.assertIsNotNone(registration)
         
 if __name__ == '__main__':

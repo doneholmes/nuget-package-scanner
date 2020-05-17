@@ -1,21 +1,31 @@
 import datetime
-import logging
-from enum import Enum
 import functools
-from typing import List, Union
+import logging
+from contextlib import asynccontextmanager
+from enum import Enum
+from typing import AsyncGenerator, List, Union
 
-from .nugetconfig import Package
-from .nuget_server import NugetServer
-from .registrations import RegistrationsIndex
-import nuget.version_util as version_util
-from .version_util import VersionPart
+import nuget
 import nuget.date_util as date_util
+import nuget.version_util as version_util
+
+from .nuget_server import NugetServer
+from .nugetconfig import Package
+from .registrations import RegistrationsIndex
+from .version_util import VersionPart
+
 
 class Nuget:
     """
     Nuget client that can be used to retrieve package registration info from multiple Nuget Servers.    
     """
-    def __init__(self, configs: dict = {}):  
+    async def __aenter__(self):
+        return self
+    
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        await self.close()    
+
+    def __init__(self, configs: dict = {}): 
         """
         Initializes the client.
         param: configs Additional Nuget servers to search if a package is not found on nuget.org.\n
@@ -23,23 +33,23 @@ class Nuget:
             value: Name
         """      
         self._configs = configs
-        self._clients_cache = [] # type: List[NugetServer]
-        self._package_cache = {}
-    
-    @property
-    def __clients(self):
-        return self.__get_clients()
+        self._clients_cache: List[NugetServer] = []
+        self._package_cache = {}     
 
-    def __get_clients(self):
+    async def close(self):
+        for c in await self.__get_clients():
+            await c.close()
+
+    async def __get_clients(self):
         if self._clients_cache:
             return self._clients_cache        
-        self._clients_cache.append(NugetServer()) # ensuring that nuget.org is added first
+        self._clients_cache.append(await NugetServer.create()) # ensuring that nuget.org is added first
         for c in self._configs:
-            self._clients_cache.append(NugetServer(c))
+            self._clients_cache.append(await NugetServer.create(c))
 
         return self._clients_cache   
     
-    def get_fetch_package_details(self, package: Package):
+    async def get_fetch_package_details(self, package: Package):
         """
         Attempts to ge the package from cache, then falls back to a nuget server query if not found.
         If a server query is attempted, this fetches nuget package details from the first :class nuget.RegistrationsIndex found
@@ -47,14 +57,14 @@ class Nuget:
         to cycle through any :param configs that have been provided.
         """
         assert isinstance(package, Package)        
-        nuget_server = self.__fetch_server_for_id(package.name)
-        # Note: If you're wondering where caching is at, it's on in request_wrapper.py
+        nuget_server: NugetServer = await self.__fetch_server_for_id(package.name)
+        # Note: If you're wondering where caching is at, it's on in the client
         if nuget_server:
-            registrations_index = nuget_server.registrations.index(package.name) # will already be cached
+            registrations_index = await nuget_server.registrations.index(package.name) # will already be cached
             package.source =  registrations_index.url            
-            self.__fetch_and_populate_version(registrations_index, package)
-            self.__fetch_and_populate_latest_release(registrations_index, package)
-            self.__fetch_and_populate_latest_version(registrations_index, package)
+            await self.__fetch_and_populate_version(registrations_index, package)
+            await self.__fetch_and_populate_latest_release(registrations_index, package)
+            await self.__fetch_and_populate_latest_version(registrations_index, package)
             package.available_version_count = self.__get_available_package_count(registrations_index)
             if package.version and package.latest_release:                
                 version_diff = version_util.get_version_count_behind(package.version, package.latest_release)
@@ -65,7 +75,7 @@ class Nuget:
         else:
             logging.info(f'Could not find {package.name} in any of the configured nuget servers.')        
 
-    def __fetch_server_for_id(self, id: str) -> NugetServer:
+    async def __fetch_server_for_id(self, id: str) -> NugetServer:
         """
         Returns the first :type nuget.NugetServer that houses the provided :param id.
         The strategy is to first search for package registrations at nuget.org and then 
@@ -74,38 +84,38 @@ class Nuget:
         :param id: A :class:dict  that contains non-nuget.org server implementations to query
         """
         ## TODO: Allow for preferred ordering in some cases? You may have a convention or some other means that allows you to know exactly which server to query.
-        for c in self.__clients:
-            index = c.registrations.index(id)                
+        for c in await self.__get_clients():
+            index = await c.registrations.index(id)                
             if index:
                 return c        
 
     # TODO: Potentially optimize these
-    def __fetch_and_populate_version(self, registrationsIndex: RegistrationsIndex, package: Package):
+    async def __fetch_and_populate_version(self, registrationsIndex: RegistrationsIndex, package: Package):
         if registrationsIndex and package.version:
             for page in registrationsIndex.items:                            
                 if not version_util.is_newer_release(page.upper, package.version):
-                    for leaf in page.items():
+                    for leaf in await page.items():
                         if leaf.catalogEntry.version == package.version and leaf.commitTimeStamp:
                             package.version_date = date_util.get_date_from_iso_string(leaf.commitTimeStamp).strftime('%Y-%m-%d')
                             return
 
-    def __fetch_and_populate_latest_version(self, registrationsIndex: RegistrationsIndex, package: Package):
+    async def __fetch_and_populate_latest_version(self, registrationsIndex: RegistrationsIndex, package: Package):
         # current version metadata
         if registrationsIndex:
             # assuming the newest is aways at the end of the list
             for page in reversed(registrationsIndex.items):                                
-                for leaf in reversed(page.items()):                    
+                for leaf in reversed(await page.items()):                    
                     package.latest_version = leaf.catalogEntry.version
                     if leaf.commitTimeStamp:
                         package.latest_version_date = date_util.get_date_from_iso_string(leaf.commitTimeStamp).strftime('%Y-%m-%d')
                     return                         
 
-    def __fetch_and_populate_latest_release(self, registrationsIndex: RegistrationsIndex, package: Package):
+    async def __fetch_and_populate_latest_release(self, registrationsIndex: RegistrationsIndex, package: Package):
         # current version metadata
         if registrationsIndex:
             # assuming the newest is aways at the end of the list
             for page in reversed(registrationsIndex.items):                                
-                for leaf in reversed(page.items()):
+                for leaf in reversed(await page.items()):
                     if version_util.is_full_release(leaf.catalogEntry.version):
                         package.latest_release = leaf.catalogEntry.version 
                         if leaf.commitTimeStamp:
@@ -118,5 +128,4 @@ class Nuget:
             for page in registrationsIndex.items:
                 count += page.count 
         return count
-
 

@@ -18,20 +18,15 @@ class GithubSearchResult:
         self.url = url        
 
 class GithubClient:
-
-    async def __aenter__(self):
-        return self
-    
-    async def __aexit__(self, exc_type, exc_value, traceback):
-        await self.__client.close()        
-
-    def __init__(self, token):                
-        headers = {"Authorization" : f"token {token}"} if token else None
-        self.__client: SmartClient = SmartClient(headers)
+         
+    def __init__(self, token, client: SmartClient):                
+        self.headers = {"Authorization" : f"token {token}"} if token else None
+        self.__client: SmartClient = client
 
     async def get_search_rate_limit_info(self) -> None:
         response = await self.__client.get(f'https://api.github.com/rate_limit')
-        search = await response.json()["resources"]["search"]
+        response_json = await response.json()
+        search = response_json["resources"]["search"]
         github_reset = datetime.datetime.utcfromtimestamp(int(response.headers["X-RateLimit-Reset"]))
         search_reset = datetime.datetime.utcfromtimestamp(int(search["reset"]))
         print(f'Github Limit: { response.headers["X-RateLimit-Limit"] }')
@@ -39,28 +34,22 @@ class GithubClient:
         print(f'Github Reset: { github_reset }')
         print(f'Search API Limit: { search["limit"] }')
         print(f'Search API Remainig: { search["remaining"] }')
-        print(f'Search API Reset: { search_reset }')
-        response.close()
+        print(f'Search API Reset: { search_reset }')        
 
     
     async def get_request_as_text(self, url: str) -> str:
-        request = await self.makeRequest(url)
-        text = await request.text()
-        request.close()
-        return text
+        async with await self.makeRequest(url) as response:
+            return await response.text() 
 
     async def get_request_as_json(self, url: str) -> dict:
-        request = await self.makeRequest(url)
-        json = await request.json()
-        request.close()
-        return json
+        async with await self.makeRequest(url) as response:
+            return await response.json()        
 
     async def makeRequest(self, url) -> aiohttp.ClientResponse:        
-        response = await self.__client.get(url, False, False)
-        if response:
-            limit = response.headers.get("X-RateLimit-Limit")
-            remaining = response.headers.get("X-RateLimit-Remaining")
-            logging.info(f'GET { url } | Limit: { limit } | Remaining: { remaining }')          
+        response = await self.__client.get(url, False, self.headers)        
+        limit = response.headers.get("X-RateLimit-Limit")
+        remaining = response.headers.get("X-RateLimit-Remaining")
+        logging.debug(f'GET { url } | Limit: { limit } | Remaining: { remaining }')          
         return response
 
     def __getNextPageLink(self, response: aiohttp.ClientResponse) -> str:
@@ -81,8 +70,9 @@ class GithubClient:
         path = item_json["path"]        
         details_url = item_json["url"]        
         details = await self.get_request_as_json(details_url)
-        sourceUrl = details["download_url"]                                  
-        results.append(GithubSearchResult(name, repo_name, path, sourceUrl))            
+        if details:
+            sourceUrl = details["download_url"]                                  
+            results.append(GithubSearchResult(name, repo_name, path, sourceUrl))            
     
     async def search_github_code(self, query, limit: Optional[int] = None) -> List[GithubSearchResult]:
         """ 
@@ -110,7 +100,7 @@ class GithubClient:
                     return search_results  
             await asyncio.wait(tasks)                       
             url = self.__getNextPageLink(response)        
-        response.close()
+        response.release()
         return search_results    
 
     async def search_nuget_configs(self, org, limit: Optional[int] = None) -> List[GithubSearchResult]:      

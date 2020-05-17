@@ -14,18 +14,21 @@ from .nugetconfig import Package
 from .registrations import RegistrationsIndex
 from .version_util import VersionPart
 
+from smart_client import SmartClient
+
 
 class Nuget:
     """
     Nuget client that can be used to retrieve package registration info from multiple Nuget Servers.    
     """
     async def __aenter__(self):
+        await self.initialize_clients()
         return self
     
     async def __aexit__(self, exc_type, exc_value, traceback):
-        await self.close()    
+        return
 
-    def __init__(self, configs: dict = {}): 
+    def __init__(self, client: SmartClient, configs: dict = {}): 
         """
         Initializes the client.
         param: configs Additional Nuget servers to search if a package is not found on nuget.org.\n
@@ -34,18 +37,20 @@ class Nuget:
         """      
         self._configs = configs
         self._clients_cache: List[NugetServer] = []
-        self._package_cache = {}     
-
-    async def close(self):
-        for c in await self.__get_clients():
-            await c.close()
+        self._package_cache = {}
+        self._client = client  
+    
+    async def initialize_clients(self):          
+        clients = await self.__get_clients()        
+        for c in clients:
+            logging.info(f'Initialized Nuget Server API @ {c.index_url}')    
 
     async def __get_clients(self):
         if self._clients_cache:
             return self._clients_cache        
-        self._clients_cache.append(await NugetServer.create()) # ensuring that nuget.org is added first
+        self._clients_cache.append(await NugetServer.create(self._client)) # ensuring that nuget.org is added first
         for c in self._configs:
-            self._clients_cache.append(await NugetServer.create(c))
+            self._clients_cache.append(await NugetServer.create(self._client,c))
 
         return self._clients_cache   
     
@@ -73,7 +78,7 @@ class Nuget:
                 package.patch_releases_behind = version_diff[VersionPart.PATCH]
                 package.set_details_url(nuget_server.package_uri_template)
         else:
-            logging.info(f'Could not find {package.name} in any of the configured nuget servers.')        
+            logging.warn(f'Could not find {package.name} in any of the configured nuget servers.')
 
     async def __fetch_server_for_id(self, id: str) -> NugetServer:
         """

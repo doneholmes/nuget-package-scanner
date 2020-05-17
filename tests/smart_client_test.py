@@ -41,28 +41,6 @@ class TestSmartClient(IsolatedAsyncioTestCase):
         r.raise_for_status.assert_not_called()
         self.assertIsNone(response)
 
-    async def test_get_404_raise(self):        
-        c = MagicMock(aiohttp.ClientSession)
-        r = MagicMock(aiohttp.ClientResponse)
-        r.status = 404
-        c.get = AsyncMock(return_value=r)                
-        self.sc.get_aiohttp_client = MagicMock(return_value=c)
-        response = await self.sc.get('some url here', False)
-        c.get.assert_awaited_once()
-        r.raise_for_status.assert_called_once()
-        self.assertIsNone(response)
-
-    async def test_get_non_200_404_raise(self):        
-        c = MagicMock(aiohttp.ClientSession)
-        r = MagicMock(aiohttp.ClientResponse)
-        r.status = 403
-        c.get = AsyncMock(return_value=r)                
-        self.sc.get_aiohttp_client = MagicMock(return_value=c)
-        response = await self.sc.get('some url here', False)
-        c.get.assert_awaited_once()
-        r.raise_for_status.assert_called_once()
-        self.assertIsNone(response)
-
     async def test_get_as_json_is_cached(self):        
         c = MagicMock(aiohttp.ClientSession)
         r = MagicMock(aiohttp.ClientResponse)

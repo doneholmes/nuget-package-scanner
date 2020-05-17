@@ -6,8 +6,7 @@ class NugetServer:
     Class used to access the Nuget Server API.
     https://docs.microsoft.com/en-us/nuget/api/overview
     """
-    DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
-    __client: SmartClient = SmartClient()    
+    DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"      
 
     def __init__(self):
         """
@@ -16,7 +15,7 @@ class NugetServer:
         pass      
     
     @classmethod
-    async def create(cls, service_index_url = DEFAULT_SERVICE_INDEX_URL):
+    async def create(cls, client: SmartClient, service_index_url = DEFAULT_SERVICE_INDEX_URL):
         """
         The constructor for the Nuget class. This creates and initialize the root 
         object for accessing the API. This method will make a call out to the Nuget 
@@ -24,11 +23,9 @@ class NugetServer:
         API and the urls used to access them.
         """    
         self = NugetServer()
+        self.__client: SmartClient = client 
         await self.__fetch_base_urls(service_index_url)          
-        return self
-
-    async def close(self):
-        await self.__client.close()
+        return self    
 
     async def __fetch_base_urls(self, service_index_url):  
         self.index_url = service_index_url

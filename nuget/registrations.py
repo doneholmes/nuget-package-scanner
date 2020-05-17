@@ -100,5 +100,5 @@ class Registrations:
         url = f'{self._version_config.get_base_url(service_version)}{package_id.lower()}/index.json'
         json = await self.__client.get_as_json(url)
         if json:                        
-            return RegistrationsIndex(json, url, self.__client)
+            return RegistrationsIndex(json, url, self.__client)        
         return

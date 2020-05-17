@@ -15,62 +15,51 @@ class SmartClient:
         return self
     
     async def __aexit__(self, exc_type, exc_value, traceback):
-        await self.close()
-
-    def __init__(self, headers: Optional[dict] = None, timeout: Optional[int] = 15):
-        self.headers=headers
-        self.timeout = aiohttp.ClientTimeout(total=timeout) if timeout else aiohttp.ClientTimeout()             
+        await self.close()                     
         
     def get_aiohttp_client(self, url: str) -> aiohttp.ClientSession:        
         u = urlparse(url)
         key = f'{u.scheme}{u.netloc}'        
         if self.clients.get(key) is None:
             conn = aiohttp.TCPConnector(limit=500)         
-            self.clients[key] = aiohttp.ClientSession(headers=self.headers,timeout=self.timeout, connector=conn)
+            self.clients[key] = aiohttp.ClientSession(connector=conn)
         return self.clients[key]
     
     async def close(self):
-        print(f'Closing {len(self.clients)} sessions...')
+        print(f'Closing {len(self.clients)} client sessions...')
         # https://docs.aiohttp.org/en/stable/client_advanced.html#graceful-shutdown
         for key in self.clients.keys():
-            print(f'Closing {key} session...')
+            print(f'Closing {key} client session...')
             await self.clients[key].close()
         self.clients = {}
     
     @alru_cache(maxsize=None)
-    async def get_as_text(self, url: str, ignore_404 = True) -> str:
-        result = await self.get(url, ignore_404)
-        if result:
-            text = await result.text()
-            result.close()
-            return text
-        return
+    async def get_as_text(self, url: str, ignore_404 = True,  headers: Optional[dict] = None) -> str:
+        response = await self.get(url, ignore_404)
+        if response:
+            async with response:      
+                return await response.text()        
     
     @alru_cache(maxsize=None)    
-    async def get_as_json(self, url: str, ignore_404 = True) -> dict:
-        result = await self.get(url, ignore_404)
-        if result:
-            json = await result.json()
-            result.close()
-            return json
-        return
+    async def get_as_json(self, url: str, ignore_404 = True, headers: Optional[dict] = None) -> dict:
+        response = await self.get(url, ignore_404)
+        if response:
+            async with response:      
+                return await response.json()       
     
-    async def get(self, url: str, ignore_404 = True, log_success = True) -> aiohttp.ClientResponse:             
+    async def get(self, url: str, ignore_404 = True, headers: Optional[dict] = None) -> aiohttp.ClientResponse:             
         assert isinstance(url, str) and url, "url must be a non-empty string"
         client = self.get_aiohttp_client(url)
         try:
-            response = await client.get(url)
+            response = await client.get(url,headers=headers)
             if ignore_404 and response.status == 404:
-                logging.info(f'404 GET {url}')
+                logging.debug(f'404 GET {url}')
                 return                    
             if response.status != 200:
-                raise response.raise_for_status()
-            if log_success:
-                logging.info(f'200 GET {url}')     
-            return response          
-        except asyncio.TimeoutError:
-            logging.error(f'Timeout Error {url}')
-        except Exception as e:            
+                raise response.raise_for_status()            
+            logging.debug(f'200 GET {url}')     
+            return response        
+        except aiohttp.ClientResponseError as e:            
             logging.exception(e)
-            raise e
+            raise
         return

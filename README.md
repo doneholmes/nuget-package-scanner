@@ -8,8 +8,8 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
 
 * Make sure you have python installed (v3.8+) and added to your `PATH` variable
 * Make sure you have pip installed `python get-pip.py`
-* `pip install requests`
-* `pip install lxml`
+* [Install aiohttp](https://docs.aiohttp.org/en/stable/#library-installation) for making web requests
+* `pip install async_lru` for memoization
 
 ## Usage
 

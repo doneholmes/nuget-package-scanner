@@ -53,6 +53,8 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
     1. Use the appropriate Nuget Server to fetch registration information for the package
 1. Generate and save CSV
 
+**Runtime Note**: The first (synchronous) version took about 3.5 minutes to run against my org (168 repositories w/ 100+ Nuget-referencing projects and ~2k individual package references. In the current (asynchronous) version, this entire process typically takes less than 20 seconds when there are no connectivity or server issues.
+
 ## Why did you write your own github client?
 
 I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithub). I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. This also gave me a chance to familiarize a bit more with the Github API. I wanted to use the [Github GraphQL API](https://developer.github.com/v4/) for this, but it doesn't support code search as of yet. If I need to support any more-complicated use cases, I will look at switching back to PyGithub.

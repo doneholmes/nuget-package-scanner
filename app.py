@@ -9,15 +9,16 @@ from typing import List
 
 from smart_client import SmartClient
 
+from async_utils import wait_or_raise
 import nuget
-from githubSearch import GithubClient, GithubSearchResult
-from nuget import NetCoreProject, Nuget, PackageConfig, PackageContainer
+from github_search import GithubClient, GithubSearchResult
+from nuget import NetCoreProject, Nuget, Package, PackageConfig, PackageContainer
 
 
 def enable_console_logging(level: int = logging.INFO):   
     logger = logging.getLogger()
     logger.setLevel(level)
-    logger.addHandler(logging.StreamHandler())    
+    logger.addHandler(logging.StreamHandler()) 
     logger.addHandler(logging.FileHandler('last_run.log','w'))
 
 async def show_github_search_rate_limit_info(github_token):
@@ -53,63 +54,93 @@ def write_to_csv(package_containers: List[PackageContainer], csv_location: str):
                 ]
                 w.writerow(package_columns)  
 
-async def __find_net_core_project_details(search_result: GithubSearchResult,  package_containers: List[PackageContainer], g: GithubClient, n: Nuget) -> None:
-    core_project_source = await g.get_request_as_text(search_result.url)
-    core_project = NetCoreProject(core_project_source, search_result.name, search_result.repo, search_result.path)
-    package_containers.append(core_project)
-    tasks = []
-    for package in core_project.packages:            
-        tasks.append(n.get_fetch_package_details(package))
-    await asyncio.wait(tasks)
+async def __fetch_net_core_project(search_result: GithubSearchResult,  package_containers: List[PackageContainer], g: GithubClient, failures: List[GithubSearchResult]) -> None:
+    try:
+        core_project_source = await g.get_request_as_text(search_result.url)
+        core_project = NetCoreProject(core_project_source, search_result.name, search_result.repo, search_result.path)
+        package_containers.append(core_project)
+    except:
+        failures.append(search_result)
 
-async def __find_net_framework_project_details(search_result: GithubSearchResult,  package_containers: List[PackageContainer], g: GithubClient, n: Nuget) -> None:
-    package_config_source = await g.get_request_as_text(search_result.url)
-    package_config = PackageConfig(package_config_source, search_result.name, search_result.repo, search_result.path)
-    package_containers.append(package_config)
-    tasks = []
-    for package in package_config.packages:            
-        tasks.append(n.get_fetch_package_details(package))
-    await asyncio.wait(tasks)
+async def __fetch_net_framework_project(search_result: GithubSearchResult,  package_containers: List[PackageContainer], g: GithubClient, failures: List[GithubSearchResult]) -> None:
+    try:
+        package_config_source = await g.get_request_as_text(search_result.url)
+        package_config = PackageConfig(package_config_source, search_result.name, search_result.repo, search_result.path)
+        package_containers.append(package_config)
+    except:
+        failures.append(search_result)
+
+async def __fetch_package_details(package: Package, n: Nuget, failures: List[Package]) -> None:
+    try:
+        await n.get_fetch_package_details(package)
+    except:
+        failures.append(package)
+
 
 async def build_org_report(org:str, token: str) -> List[PackageContainer]:
     start = time.perf_counter()
     async with SmartClient() as client:
         # Find any additional nuget servers that exist for this org
-        g = GithubClient(token, client)        
-        configs = await g.get_unique_nuget_configs(org)    
+        g = GithubClient(token, client)
+        configs = await g.get_unique_nuget_configs(org)
+
         logging.info(f'Found {len(configs)} Nuget Server(s) to query.')
         for c in configs:
             logging.info(f'{configs[c]} Index: {c}')                
 
         # Create Nuget client from discovered configs
         async with Nuget(client, configs) as n:              
-            package_containers: List[PackageContainer] = []
-            tasks = []
-            # Find all .Net Core projects with nuget packages
-            net_core_task = asyncio.create_task(g.search_netcore_csproj(org))
-            # Find all .Net Framework projects with nuget packages
+            # Find all projects with nuget packages
+            net_core_task = asyncio.create_task(g.search_netcore_csproj(org))            
             net_framework_task = asyncio.create_task(g.search_package_configs(org))
 
-            await asyncio.wait([net_core_task, net_framework_task])
+            # Note: When Github is having problems, this call can error
+            await wait_or_raise([net_core_task, net_framework_task])
 
             core_projects: List[GithubSearchResult] = net_core_task.result()
             logging.info(f'Found {len(core_projects)} .Net Core projects to process.')
             package_configs: List[GithubSearchResult] = net_framework_task.result()
-            logging.info(f'Found {len(package_configs)} legacy .Net Framework projects to process.')                                 
+            logging.info(f'Found {len(package_configs)} legacy .Net Framework projects to process.')
 
+            # Fetch all project contents
+            # TODO: Potentially optimize by fetching packages as these come in
+            package_containers: List[PackageContainer] = []
+            failed_projects: List[GithubSearchResult] = []
+            fetch_project_tasks = []
             for core_project in core_projects:
-                tasks.append(__find_net_core_project_details(core_project, package_containers, g, n))
+                fetch_project_tasks.append(asyncio.create_task(__fetch_net_core_project(core_project, package_containers, g, failed_projects),name=core_project.url))
             for package_config in package_configs:
-                tasks.append(__find_net_framework_project_details(package_config, package_containers, g, n))
+                fetch_project_tasks.append(asyncio.create_task(__fetch_net_framework_project(package_config, package_containers, g, failed_projects),name=package_config.url))
 
-            await asyncio.wait(tasks)            
+            await asyncio.wait(fetch_project_tasks)
+            
+            # For now, just report if there were any projects that we failed to fetch
+            for f in failed_projects:
+                logging.warn(f'Failed to get package containter {f.name} from {f.url}')
+
+            # Fetch all package details
+            failed_packages: List[Package] = []  
+            fetch_package_tasks = []
+            for pc in package_containers:
+                for p in pc.packages:
+                    name = p.name + p.version if p.version else '' + p.target_framework if p.target_framework else ''
+                    fetch_package_tasks.append(asyncio.create_task(__fetch_package_details(p, n, failed_packages), name=name))
+
+            await asyncio.wait(fetch_package_tasks)
+
+            # For now, just report if there were any packages that we failed to fetch
+            for fp in failed_packages:
+                logging.warn(f'Failed to get package {fp.name} from discovered nuget server(s).')
 
             stop = time.perf_counter()
             logging.info(f'Processed {org} for Nuget packages in  {stop - start:0.4f} seconds')
             logging.info(f'Cache Hit Info for client.get_as_json  {client.get_as_json.cache_info()}')
             logging.info(f'Cache Hit Info for client.get_as_text  {client.get_as_text.cache_info()}')
 
-            return package_containers            
+            # TODO: Add retry logic for failed tasks (Flush alru_cache and retry)
+            # client.get_as_json.invalidate('key')
+
+            return package_containers    
 
 async def run(github_org:str, github_token: str = None, output_file: str = None):    
     logging.info(f'Building Nuget dependency report for the {github_org} Github org.')

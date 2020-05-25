@@ -13,7 +13,7 @@ class TestSmartClient(IsolatedAsyncioTestCase):
         self.sc = SmartClient()
 
     async def asyncTearDown(self):
-        self.sc.close()
+        await self.sc.close()
                   
     async def test_get_empty(self):        
         with self.assertRaises(AssertionError):
@@ -84,7 +84,7 @@ class TestSmartClient(IsolatedAsyncioTestCase):
         client = self.sc.get_aiohttp_client(url)
         client2 = self.sc.get_aiohttp_client(url2)
         self.assertNotEqual(client,client2)
-        self.assertEqual(len(self.sc.clients),2)
+        self.assertEqual(len(self.sc.clients),2)   
 
         
 if __name__ == '__main__':

@@ -2,11 +2,12 @@ import asyncio
 import datetime
 import logging
 import os
-from typing import AsyncGenerator, List, Optional
+from typing import AsyncGenerator, List, Optional, Set
 
 import aiohttp
 from smart_client import SmartClient
 
+from async_utils import wait_or_raise
 from nuget import NugetConfig
 
 
@@ -19,8 +20,9 @@ class GithubSearchResult:
 
 class GithubClient:
          
-    def __init__(self, token, client: SmartClient):                
-        self.headers = {"Authorization" : f"token {token}"} if token else None
+    def __init__(self, token, client: SmartClient): 
+        assert isinstance(token, str) and token
+        self.headers = {"Authorization" : f"token {token}"}
         self.__client: SmartClient = client
 
     async def get_search_rate_limit_info(self) -> None:
@@ -96,9 +98,9 @@ class GithubClient:
                 result_count += 1                
                 tasks.append(self.__process_search_page(item,search_results))
                 if isinstance(limit, int) and result_count >= limit:
-                    await asyncio.wait(tasks)                  
+                    await wait_or_raise(tasks)                      
                     return search_results  
-            await asyncio.wait(tasks)                       
+            await wait_or_raise(tasks) 
             url = self.__getNextPageLink(response)        
         response.release()
         return search_results    
@@ -130,5 +132,5 @@ class GithubClient:
         configsByValue = {}    
         for r in results:        
             tasks.append(self.__build_nuget_config(r, configsByValue))                
-        await asyncio.wait(tasks)
+        await wait_or_raise(tasks)
         return configsByValue

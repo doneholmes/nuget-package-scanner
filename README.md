@@ -33,14 +33,13 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
    - **Latest Release Date** - The date the **Latest Release** was published to the Nuget Server
    - **Latest Package** - The latest published version of the package (inclusive of pre-release) that has been published to the Nuget Server
    - **Latest Package Date** - The date the **Latest Package** was published to the Nuget Server
-   - **Link** - If it is a public package on the Nuget Server (e.g nuget.org), this will be a url to the detail page for the package. This link is not likely to be provided by a private package repo
+   - **Link** - If it is a public package on the Nuget Server (e.g nuget.org), this will be a url to the detail page for the package. This link is not likely to be provided by a private package repo   
+   - **Source** - Url of the registration index for the package that was used to GET details
 - Calculated (included for convenience)
    - **Major Release Behind** - The number of *major* releases behind the referenced package is from the **Latest Release**
    - **Minor Release Behind** - The number of *minor* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version
    - **Patch Release Behind** - The number of *patch* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version and *minor* version
    - **Available Version Count** - The total number of versions of the package that are published to the Nuget Server.
-   - **Link** - Url that points to the package description page if it's a public package
-   - **Source** - Url of the registration index for the package that was used to GET details
 
 ## Basic Application Flow
 

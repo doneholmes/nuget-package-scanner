@@ -41,6 +41,8 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
    - **Minor Release Behind** - The number of *minor* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version
    - **Patch Release Behind** - The number of *patch* releases behind the referenced package is from the **Latest Release**. This will only be calculated if the packages have the same *major* version and *minor* version
    - **Available Version Count** - The total number of versions of the package that are published to the Nuget Server.
+   - **Link** - Url that points to the package description page if it's a public package
+   - **Source** - Url of the registration index for the package that was used to GET details
 
 ## Basic Application Flow
 

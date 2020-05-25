@@ -14,7 +14,7 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
 ## Usage
 
 1. Clone this repo to a local directory
-1. You will need to ensure that you have a Github personal toke available for the github search to work properly.
+1. You will need to ensure that you have a Github personal token available for the github search to work properly.
     * https://github.com/settings/tokens
     * Once you have acquired a token, setting a `GITHUB_TOKEN` envorinment variable with the value, or have it available to provide in the command prompt.
 1. `cd` to the parent directory of this repo

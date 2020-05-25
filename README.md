@@ -53,21 +53,21 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
 
 ## Why did you write your own github client?
 
-I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithub). I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. This also gave me a chance to familiarize a bit more with the Github API. I wanted to usd the [Github GraphQL API](https://developer.github.com/v4/) for this, but it doesn't support code search as of yet. If I need to support any more-complicated use cases, I would look at switching back to PyGithub.
+I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithub). I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. This also gave me a chance to familiarize a bit more with the Github API. I wanted to use the [Github GraphQL API](https://developer.github.com/v4/) for this, but it doesn't support code search as of yet. If I need to support any more-complicated use cases, I will look at switching back to PyGithub.
 
 ## Why did you write this in Python? Nuget only supports .Net.
 
-I wanted to learn new stuff and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.
+I wanted to learn something new and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.
 
 ## TODOs
-- Shared session(s) in web requests to support connection pooling and boost performance
-- More resilliancy in web call timeout errors. Currently, any timeout crashes things.
-- Build a visual front end consumer
-- Implement async web requests in nuget module. This would speed this up a good bit. Most of the time is currently spent waiting on web requests to complete and there is little reason for that to happen serially.
+- [X] Shared session(s) in web requests to support connection pooling and boost performance
+- [X] More resilliancy in web call timeout errors. Currently, any timeout crashes things.
+- [ ] Build a visual front end consumer
+- [X] Implement async web requests in nuget module. This would speed this up a good bit. Most of the time is currently spent waiting on web requests to complete and there is little reason for that to happen serially.
     - https://docs.aiohttp.org/en/stable/
     - Re-writing this in Go would be another interesting option to achieve async and learn something new
-- Rate limiting checks on calls to the github api. When searching within a very large github org, there is the possiblity that the search api rate limit budget could be exhausted (currently 30 calls/minute if authenticated)
+- [ ] Rate limiting checks on calls to the github api. When searching within a very large github org, there is the possiblity that the search api rate limit budget could be exhausted (currently 30 calls/minute if authenticated)
     - Github Rate Limiting: https://developer.github.com/v3/#rate-limiting
     - Github Search API Rate Limiting: https://developer.github.com/v3/search/#rate-limit
-- Optimizing json object scanning algorhithms. It's currently a very simple brute force approach. This may be a lot of work for little gain.
-- Possibly break out the nuget module into a stand-alone Python package. I'm not sure if there's any use beyond basic GET functionality.
+- [ ] Optimizing json object scanning algorhithms. It's currently a very simple brute force approach. This may be a lot of work for little gain.
+- [ ] Possibly break out the nuget module into a stand-alone Python package. I'm not sure if there's any use beyond basic GET functionality.

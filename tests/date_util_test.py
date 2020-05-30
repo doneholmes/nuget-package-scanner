@@ -1,7 +1,7 @@
 
 import datetime
 import unittest
-import nuget.date_util as date_util
+import nuget_package_scanner.nuget.date_util as date_util
 
 class TestDateUtil(unittest.TestCase):
 

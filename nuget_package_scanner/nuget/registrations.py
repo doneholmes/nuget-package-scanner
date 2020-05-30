@@ -1,7 +1,7 @@
 import logging
 from typing import List, Union
 
-from smart_client import SmartClient
+from ..smart_client import SmartClient
 
 from .registrations_version import (RegistrationsVersion,
                                     RegistrationsVersionConfig)

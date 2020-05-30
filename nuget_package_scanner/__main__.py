@@ -1,6 +1,7 @@
-import app
 import asyncio
 import logging
+
+import nuget_package_scanner.app as app
 
 app.enable_console_logging()
 org = input("Enter a github org to search: ")

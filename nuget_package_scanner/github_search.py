@@ -5,10 +5,10 @@ import os
 from typing import AsyncGenerator, List, Optional, Set
 
 import aiohttp
-from smart_client import SmartClient
 
-from async_utils import wait_or_raise
-from nuget import NugetConfig
+from .smart_client import SmartClient
+from .async_utils import wait_or_raise
+from .nuget import NugetConfig
 
 
 class GithubSearchResult:

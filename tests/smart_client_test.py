@@ -1,11 +1,10 @@
 import aiohttp
 import asyncio
-import pytest
 import unittest
 from unittest import IsolatedAsyncioTestCase
 from unittest.mock import AsyncMock, MagicMock
 
-from smart_client import SmartClient
+from nuget_package_scanner.smart_client import SmartClient
 
 class TestSmartClient(IsolatedAsyncioTestCase):    
 

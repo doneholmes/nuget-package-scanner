@@ -1,6 +1,6 @@
 import unittest
 import json
-import nuget
+import nuget_package_scanner.nuget as nuget
 
 class TestRegistrationsVersionConfig(unittest.TestCase):
 

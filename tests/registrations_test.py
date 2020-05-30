@@ -1,7 +1,7 @@
 import unittest
 import json
-from nuget.registrations import Registrations
-import smart_client
+from nuget_package_scanner.nuget.registrations import Registrations
+import nuget_package_scanner.smart_client as smart_client
 
 class TestRegistrations(unittest.TestCase):
 

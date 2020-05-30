@@ -1,5 +1,5 @@
-import nuget.version_util
-import nuget.date_util
+from . import version_util
+from . import date_util
 from .nuget import Nuget
 from .nuget_server import NugetServer
 from .registrations import Registrations

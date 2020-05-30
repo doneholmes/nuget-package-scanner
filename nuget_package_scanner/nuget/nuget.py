@@ -4,11 +4,11 @@ import logging
 from enum import Enum
 from typing import AsyncGenerator, List, Union
 
-from smart_client import SmartClient
+from ..smart_client import SmartClient
 
-import nuget
-import nuget.date_util as date_util
-import nuget.version_util as version_util
+import nuget_package_scanner.nuget
+import nuget_package_scanner.nuget.date_util as date_util
+import nuget_package_scanner.nuget.version_util as version_util
 
 from .nuget_server import NugetServer
 from .nuget_config import Package

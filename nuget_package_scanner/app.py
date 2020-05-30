@@ -7,13 +7,10 @@ import time
 from operator import attrgetter
 from typing import List
 
-from smart_client import SmartClient
-
-from async_utils import wait_or_raise
-import nuget
-from github_search import GithubClient, GithubSearchResult
-from nuget import NetCoreProject, Nuget, Package, PackageConfig, PackageContainer
-
+from nuget_package_scanner.smart_client import SmartClient
+from nuget_package_scanner.async_utils import wait_or_raise
+from nuget_package_scanner.github_search import GithubClient, GithubSearchResult
+from nuget_package_scanner.nuget import NetCoreProject, Nuget, Package, PackageConfig, PackageContainer
 
 def enable_console_logging(level: int = logging.INFO):   
     logger = logging.getLogger()
@@ -158,15 +155,6 @@ async def run(github_org:str, github_token: str = None, output_file: str = None)
         try:
             write_to_csv(sorted(package_containers, key=attrgetter('repo', 'path')), output_file)
         except Exception as e:
-            logging.exception(e)    
-    
-    # Iterate over all pacakges and log/display    
-    # for package_container in package_containers:                                                  
-    #     logging.info(f'Repo:{package_container.repo} Path:{package_container.path}')
-    #     for package in package_container.packages:
-    #         logging.info(f'********** Name:{package.name} Source: {package.source}')
-    #         logging.info(f'********** Referenced Version:{package.version} Date: {package.version_date}')
-    #         logging.info(f'********** Latest Release: {package.latest_release} Date: {package.latest_release_date}')
-    #         logging.info(f'********** Latest Version: {package.latest_version} Date: {package.latest_version_date}')    
+            logging.exception(e)        
     
     return package_containers

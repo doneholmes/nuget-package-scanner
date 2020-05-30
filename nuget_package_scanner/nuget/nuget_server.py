@@ -1,5 +1,5 @@
 from .registrations import Registrations
-from smart_client import SmartClient
+from ..smart_client import SmartClient
 
 class NugetServer:
     """

@@ -2,11 +2,10 @@ import csv
 import os
 import unittest
 
-import app
-import nuget
-from nuget import PackageContainer
-from nuget import NetCoreProject
-from nuget import PackageConfig
+import nuget_package_scanner.app as app
+from nuget_package_scanner.nuget import PackageContainer
+from nuget_package_scanner.nuget import NetCoreProject
+from nuget_package_scanner.nuget import PackageConfig
 
 class TestApp(unittest.TestCase):
     TEST_CSV_PATH = os.path.join(os.path.dirname(__file__),'testoutput\\test-report.csv')

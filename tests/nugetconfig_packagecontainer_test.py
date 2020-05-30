@@ -1,8 +1,8 @@
 import os
 import unittest
-from nuget import PackageContainer as PackageContainer
-from nuget import PackageConfig as PackageConfig
-from nuget import NetCoreProject as NetCoreProject
+from nuget_package_scanner.nuget import PackageContainer as PackageContainer
+from nuget_package_scanner.nuget import PackageConfig as PackageConfig
+from nuget_package_scanner.nuget import NetCoreProject as NetCoreProject
 
 class TestPackageContainer(unittest.TestCase):
 

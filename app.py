@@ -142,7 +142,7 @@ async def build_org_report(org:str, token: str) -> List[PackageContainer]:
 
             return package_containers    
 
-async def run(github_org:str, github_token: str = None, output_file: str = None):    
+async def run(github_org:str, github_token: str = None, output_file: str = None) -> List[PackageContainer]:    
     logging.info(f'Building Nuget dependency report for the {github_org} Github org.')
     assert isinstance(github_org,str) and github_org, ':param github_org must be a non-empty string.'
     org = github_org
@@ -151,7 +151,7 @@ async def run(github_org:str, github_token: str = None, output_file: str = None)
     token = github_token if isinstance(github_token,str) and github_token else os.getenv('GITHUB_TOKEN')
     assert isinstance(token,str) and token, 'You must either pass this method a non-empty param: github_token or set the GITHUB_TOKEN environment varaible to a non-empty string.'
 
-    package_containers = await build_org_report(org, token)
+    package_containers: List[PackageContainer] = await build_org_report(org, token)
     
     if output_file:
         logging.info(f'Writing Report to {output_file}.')
@@ -159,7 +159,7 @@ async def run(github_org:str, github_token: str = None, output_file: str = None)
             write_to_csv(sorted(package_containers, key=attrgetter('repo', 'path')), output_file)
         except Exception as e:
             logging.exception(e)    
-
+    
     # Iterate over all pacakges and log/display    
     # for package_container in package_containers:                                                  
     #     logging.info(f'Repo:{package_container.repo} Path:{package_container.path}')
@@ -168,3 +168,5 @@ async def run(github_org:str, github_token: str = None, output_file: str = None)
     #         logging.info(f'********** Referenced Version:{package.version} Date: {package.version_date}')
     #         logging.info(f'********** Latest Release: {package.latest_release} Date: {package.latest_release_date}')
     #         logging.info(f'********** Latest Version: {package.latest_version} Date: {package.latest_version_date}')    
+    
+    return package_containers

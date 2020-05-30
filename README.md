@@ -4,19 +4,13 @@ nuget-package-scanner is a Python module that will query your Github organizatio
 
 Currently, results are saved to a csv file that can be imported into a spreadsheet or another db that can be used for displaying, sorting, and further analysis.
 
-## Dependencies
-
-* Make sure you have python installed (v3.8+) and added to your `PATH` variable
-* Make sure you have pip installed `python get-pip.py`
-* [Install aiohttp](https://docs.aiohttp.org/en/stable/#library-installation) for making web requests
-* `pip install async_lru` for memoization
-
-## Usage
+## Usage (as a script)
 
 1. Clone this repo to a local directory
+1. Make sure to `pip install -r requirements.txt`
 1. You will need to ensure that you have a [Github personal token](https://github.com/settings/tokens) available for the github search to work properly. Once you have acquired a token, set a `GITHUB_TOKEN` envorinment variable with the value, or have it available to provide in the command prompt.
 1. `cd` to the parent directory of this repo
-1. `python nuget-package-scanner`
+1. `python -m nuget-package-scanner`
 1. Follow the prompt(s)
 1. Import the exported .csv into google sheets (or another spreadsheet app)
 

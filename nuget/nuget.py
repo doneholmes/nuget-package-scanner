@@ -1,20 +1,19 @@
 import datetime
 import functools
 import logging
-from contextlib import asynccontextmanager
 from enum import Enum
 from typing import AsyncGenerator, List, Union
+
+from smart_client import SmartClient
 
 import nuget
 import nuget.date_util as date_util
 import nuget.version_util as version_util
 
 from .nuget_server import NugetServer
-from .nugetconfig import Package
+from .nuget_config import Package
 from .registrations import RegistrationsIndex
 from .version_util import VersionPart
-
-from smart_client import SmartClient
 
 
 class Nuget:
@@ -133,4 +132,3 @@ class Nuget:
             for page in registrationsIndex.items:
                 count += page.count 
         return count
-

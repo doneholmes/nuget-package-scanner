@@ -18,6 +18,7 @@ pycares==3.1.1
 pycparser==2.20
 pylint==2.5.2
 six==1.15.0
+tenacity==6.2.0
 toml==0.10.1
 wrapt==1.12.1
 yarl==1.4.2

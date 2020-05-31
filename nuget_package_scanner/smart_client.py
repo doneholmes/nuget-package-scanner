@@ -6,6 +6,7 @@ import urllib.parse
 
 import aiohttp
 from async_lru import alru_cache
+from tenacity import retry, stop_after_attempt, wait_random
 
 
 class SmartClient:    
@@ -26,8 +27,9 @@ class SmartClient:
         u = urlparse(url)
         key = f'{u.scheme}{u.netloc}'        
         if self.clients.get(key) is None:
-            conn = aiohttp.TCPConnector(limit=50) #TODO: Dial in pool size        
-            self.clients[key] = aiohttp.ClientSession(connector=conn)
+            conn = aiohttp.TCPConnector(limit=100) #TODO: Dial in pool size
+            timeout = aiohttp.ClientTimeout(total=60) #TODO: Dial in timeout
+            self.clients[key] = aiohttp.ClientSession(connector=conn,timeout=timeout)
         return self.clients[key]
     
     async def close(self):
@@ -51,7 +53,8 @@ class SmartClient:
         if response:
             async with response:      
                 return await response.json()    
-    
+
+    @retry(stop=stop_after_attempt(3), wait=wait_random(min=1, max=2))
     async def get(self, url: str, ignore_404 = True, headers: Optional[dict] = None) -> aiohttp.ClientResponse:             
         assert isinstance(url, str) and url, "url must be a non-empty string"
         client = self.get_aiohttp_client(url)
@@ -67,5 +70,4 @@ class SmartClient:
         except aiohttp.ClientResponseError as e:            
             logging.exception(e)
             raise
-        return
 

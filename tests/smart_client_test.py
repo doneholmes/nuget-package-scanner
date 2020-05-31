@@ -1,5 +1,6 @@
 import aiohttp
 import asyncio
+import tenacity
 import unittest
 from unittest import IsolatedAsyncioTestCase
 from unittest.mock import AsyncMock, MagicMock
@@ -14,9 +15,20 @@ class TestSmartClient(IsolatedAsyncioTestCase):
     async def asyncTearDown(self):
         await self.sc.close()
                   
-    async def test_get_empty(self):        
-        with self.assertRaises(AssertionError):
-            await self.sc.get('')
+    async def test_get_empty(self):   
+        c = MagicMock(aiohttp.ClientSession)    
+        c.get = AsyncMock()
+        self.sc.get_aiohttp_client = MagicMock(return_value=c)
+        with self.assertRaises(tenacity.RetryError):
+            await self.sc.get('')        
+
+    async def test_retry_on_error(self):   
+        c = MagicMock(aiohttp.ClientSession)    
+        c.get = AsyncMock()
+        self.sc.get_aiohttp_client = MagicMock(return_value=c)
+        with self.assertRaises(tenacity.RetryError):
+            await self.sc.get('notreallyaurl')
+        self.assertEqual(c.get.await_count,3)
     
     async def test_get_200(self):        
         c = MagicMock(aiohttp.ClientSession)

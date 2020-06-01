@@ -45,7 +45,7 @@ class GithubClient:
 
     async def get_request_as_json(self, url: str) -> dict:
         async with await self.makeRequest(url) as response:
-            return await response.json()        
+            return await response.json()
 
     async def makeRequest(self, url) -> aiohttp.ClientResponse:        
         response = await self.__client.get(url, False, self.headers)        
@@ -96,7 +96,7 @@ class GithubClient:
 
             for item in results["items"]:
                 result_count += 1                
-                tasks.append(self.__process_search_page(item,search_results))
+                tasks.append(asyncio.create_task(self.__process_search_page(item,search_results),name=f'__process_search_page[{url}]'))
                 if isinstance(limit, int) and result_count >= limit:
                     await wait_or_raise(tasks)                      
                     return search_results  
@@ -131,6 +131,6 @@ class GithubClient:
         results = await self.search_nuget_configs(org, limit)  
         configsByValue = {}    
         for r in results:        
-            tasks.append(self.__build_nuget_config(r, configsByValue))                
+            tasks.append(asyncio.create_task(self.__build_nuget_config(r, configsByValue),name=f'__build_nuget_config[{r.url}]'))
         await wait_or_raise(tasks)
         return configsByValue

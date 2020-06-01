@@ -3,6 +3,9 @@ import logging
 
 import nuget_package_scanner.app as app
 
+print(f'{app.NAME} v{app.VERSION}')
+print(f'Occassionally, you will get errors due to IO issues. Please retry if this happens.')
+
 app.enable_console_logging()
 org = input("Enter a github org to search: ")
 token = input("Enter a github token (or enter to use GITHUB_TOKEN environment variable: ")

@@ -12,6 +12,9 @@ from nuget_package_scanner.async_utils import wait_or_raise
 from nuget_package_scanner.github_search import GithubClient, GithubSearchResult
 from nuget_package_scanner.nuget import NetCoreProject, Nuget, Package, PackageConfig, PackageContainer
 
+NAME = 'nuget-package-scanner'
+VERSION = '0.0.1'
+
 def enable_console_logging(level: int = logging.INFO):   
     logger = logging.getLogger()
     logger.setLevel(level)

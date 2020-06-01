@@ -1,10 +1,9 @@
 import setuptools
+import nuget_package_scanner.app
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-NAME = "nuget-package-scanner"
-VERSION = "0.0.1"
 REQUIRES = [
     "aiohttp>=3,<4",
     "cchardet>=2.1.6",
@@ -15,8 +14,8 @@ REQUIRES = [
 ]
 
 setuptools.setup(
-    name=NAME,
-    version=VERSION,
+    name=nuget_package_scanner.app.NAME,
+    version=nuget_package_scanner.app.VERSION,
     author="Donnie Holmes",
     author_email="donnieh@gmail.com",
     description="Scans a github org for Nuget dependencies and builds a currency report",

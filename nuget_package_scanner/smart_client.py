@@ -9,7 +9,22 @@ from async_lru import alru_cache
 from tenacity import retry, stop_after_attempt, wait_random
 
 
-class SmartClient:    
+class SmartClient:
+    '''
+    Wrapper built around the aiohttp.ClientSession. This class is designed to provide robust and performant
+    IO in the case where you need to make many calls to several servers potentially simultaneously. 
+    
+    The get method includes some basic retry logic that should cover the case in which a resource is temporarily
+    unavailable and is not memoized. The get_as_json and get_as_text methods are memoized and will only result
+    in 1 external call to fetch the matching resource per application session. See async_lru documentation for a
+    a description of how to flush cache if necessary.
+
+    >>> async with SmartClient() as sc
+    >>>     # initial call to server is wrapped in retry logic (will retry 3 times)
+    >>>     response_json = await sc.get_as_json('http://site.com/resource')
+    >>>     # subsequent call is retrieved from cache
+    >>>     response_json2 = await sc.get_as_json('http://site.com/resource')
+    '''
     clients: Dict[str, aiohttp.ClientSession] = {} # Dictionary to cache clients per base url to better support connection pooling    
     
     async def __aenter__(self):

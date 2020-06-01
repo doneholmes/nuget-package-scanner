@@ -45,6 +45,7 @@ class GithubClient:
 
     async def get_request_as_json(self, url: str) -> dict:
         async with await self.makeRequest(url) as response:
+            return await response.json()
 
     async def makeRequest(self, url) -> aiohttp.ClientResponse:        
         response = await self.__client.get(url, False, self.headers)        

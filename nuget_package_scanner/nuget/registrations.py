@@ -9,41 +9,41 @@ from .registrations_version import (RegistrationsVersion,
 
 class CatalogEntry:
     def __init__(self, json):
-        self.url = json["@id"] # type: str
-        self.id = json["id"] # type: str
-        self.version = json["version"] # type: str
+        self.url: str = json["@id"]
+        self.id: str = json["id"]
+        self.version: str = json["version"]
         
-        self.authors = json.get("authors") # type: Union[string,List[string]]        
+        self.authors: Union[str, List[str]] = json.get("authors")       
         self.depracation = json.get("deprecation")
-        self.description = json.get("description") # type: str
-        self.licenseUrl = json.get("licenseUrl") # type: str
-        self.licenseExpression = json.get("licenseExpression") # type: str
-        self.listed = json.get("listed") # type: bool
-        self.minClientVersion = json.get("minClientVersion") # type: str
-        self.projectUrl = json.get("projectUrl") # type: str
-        self.published = json.get("published") # type: str
-        self.requireLicenseAcceptance = json.get("requireLicenseAcceptance") # type: bool
-        self.summary = json.get("summary") # type: str
-        self.tags = json.get("tags") # type: Union[string,List[string]]
-        self.title = json.get("title") # type: str
+        self.description: str = json.get("description")
+        self.licenseUrl: str = json.get("licenseUrl")
+        self.licenseExpression: str = json.get("licenseExpression")
+        self.listed: bool = json.get("listed")
+        self.minClientVersion: str = json.get("minClientVersion")
+        self.projectUrl: str = json.get("projectUrl")
+        self.published: str = json.get("published")
+        self.requireLicenseAcceptance: bool = json.get("requireLicenseAcceptance")
+        self.summary: str = json.get("summary")
+        self.tags: Union[str, List[str]] = json.get("tags")
+        self.title: str = json.get("title")
 
         self.dependencyGroups = json.get("dependencyGroups")        
 
 class RegistrationLeaf:    
     def __init__(self, json):
-        self.url = json["@id"] # type: str
-        self.packageContent = json["@id"] # type: str
+        self.url: str = json["@id"]
+        self.packageContent: str = json["@id"]
         self.catalogEntry = CatalogEntry(json["catalogEntry"])
-        self.commitTimeStamp = json.get("commitTimeStamp") # type: str
+        self.commitTimeStamp: str = json.get("commitTimeStamp")
 
 class RegistrationPage:    
     def __init__(self, json, client: SmartClient):        
-        self.url = json["@id"] # type: str
-        self.count = json["count"] #type: int            
-        self.lower = json["lower"] # type: str
-        self.parent = json.get("parent") # type: str
-        self.upper = json["upper"] # type: str
-        self.commitTimeStamp = json.get("commitTimeStamp") # type: str
+        self.url: str = json["@id"]
+        self.count: int = json["count"]
+        self.lower: str = json["lower"]
+        self.parent: str = json.get("parent")
+        self.upper: str = json["upper"]
+        self.commitTimeStamp: str = json.get("commitTimeStamp")
         self.__set_items(json)
         self.__client = client     
 
@@ -74,9 +74,9 @@ class RegistrationsIndex:
         assert isinstance(json, dict), f":param json must be a dict for url:{url} json:{json}"
         assert isinstance(url, str), f":param url must be a str. {url}"
         self.url = url
-        self.count = json["count"] #type: int
-        self.items = [] #type: List[RegistrationPage]
-        self.commitTimeStamp = json.get("commitTimeStamp") # type: str
+        self.count: int = json["count"]
+        self.items: List[RegistrationPage] = []
+        self.commitTimeStamp: str = json.get("commitTimeStamp")
         for i in json["items"]:
             self.items.append(RegistrationPage(i, client))        
 

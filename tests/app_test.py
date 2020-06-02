@@ -1,5 +1,6 @@
 import csv
 import os
+from typing import List
 import unittest
 
 import nuget_package_scanner.app as app
@@ -23,7 +24,7 @@ class TestApp(unittest.TestCase):
     #     pc = open(os.path.join(os.path.dirname(__file__), 'sampledata\\sample_packages.config')).read()
     #     config2 = PackageConfig(pc, "sample-package.config", "config-repo", "path/to/the/proj2")
 
-    #     package_containers = [config1, config2] #type: List[PackageContainer]
+    #     package_containers: List[PackageContainer] = [config1, config2]
                 
     #     app.write_to_csv(package_containers, self.TEST_CSV_PATH)
 

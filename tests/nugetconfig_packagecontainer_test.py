@@ -28,7 +28,7 @@ class TestPackageContainer(unittest.TestCase):
         name = "alkj"
         repo = "lwer"
         path = ";lakja"        
-        config = open(os.path.join(os.path.dirname(__file__), 'sampledata\\sample_packages.config')).read()
+        config = open(os.path.join(os.path.dirname(__file__), 'sampledata/sample_packages.config')).read()
         package_config = PackageConfig(config, name, repo, path)
         self.assertIsInstance(package_config, PackageContainer)
         self.assertIsInstance(package_config, PackageConfig)
@@ -41,7 +41,7 @@ class TestPackageContainer(unittest.TestCase):
         name = "alkj"
         repo = "lwer"
         path = ";lakja"        
-        csproj = open(os.path.join(os.path.dirname(__file__), 'sampledata\\sample.csproj')).read()
+        csproj = open(os.path.join(os.path.dirname(__file__), 'sampledata/sample.csproj')).read()
         package_config = NetCoreProject(csproj, name, repo, path)
         self.assertIsInstance(package_config, PackageContainer)
         self.assertIsInstance(package_config, NetCoreProject)

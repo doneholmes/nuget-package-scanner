@@ -26,7 +26,7 @@ class GithubClient:
         self.__client: SmartClient = client
 
     async def get_search_rate_limit_info(self) -> None:
-        response = await self.__client.get(f'https://api.github.com/rate_limit')
+        response = await self.__client.get(f'https://api.github.com/rate_limit', False, self.headers)
         response_json = await response.json()
         search = response_json["resources"]["search"]
         github_reset = datetime.datetime.utcfromtimestamp(int(response.headers["X-RateLimit-Reset"]))
@@ -37,7 +37,6 @@ class GithubClient:
         print(f'Search API Limit: { search["limit"] }')
         print(f'Search API Remainig: { search["remaining"] }')
         print(f'Search API Reset: { search_reset }')        
-
     
     async def get_request_as_text(self, url: str) -> str:
         async with await self.makeRequest(url) as response:
@@ -45,7 +44,11 @@ class GithubClient:
 
     async def get_request_as_json(self, url: str) -> dict:
         async with await self.makeRequest(url) as response:
-            return await response.json()
+            try: #TODO There is an occassional issue with reading the response
+                return await response.json()
+            except Exception as e:
+                logging.warning(f'Failed to retrieve json for {url}')
+                logging.exception(e)
 
     async def makeRequest(self, url) -> aiohttp.ClientResponse:        
         response = await self.__client.get(url, False, self.headers)        
@@ -80,8 +83,16 @@ class GithubClient:
         """ 
         Executes a github code search and returns the results in a list.
         Search results are paged - This call will likely result in multple requests to the api in
-        order to aggregate all results.
-        Note: There is currently no logic to account for search api rate limiting
+        order to aggregate all results. This call runs serially as it's explicity requested in
+        the Gihub API documentation (link below).
+
+        Note: There is currently no logic to account for search api rate limiting. The github search
+        API will occassionally truncate responses based on how expensive the search call is on their
+        backend. This can produce unexpected results.
+        https://developer.github.com/v3/search/#timeouts-and-incomplete-results
+        https://developer.github.com/changes/2014-04-07-understanding-search-results-and-potential-timeouts/
+        Explicit ask to not make calls for a user concurrently
+        https://developer.github.com/v3/guides/best-practices-for-integrators/#dealing-with-abuse-rate-limits
         """
         search_results = []  
         response: aiohttp.ClientResponse = None      
@@ -91,17 +102,17 @@ class GithubClient:
             logging.info(f'Github Search Query: {url}')
             #TODO: Rate limiting checking while running
             response = await self.makeRequest(url)         
-            results = await response.json()
-            tasks = []
+            results = await response.json()            
+
+            if results["incomplete_results"] is True:
+                logging.debug(f'Incomplete results returned for code search query.')
 
             for item in results["items"]:
                 result_count += 1                
-                tasks.append(asyncio.create_task(self.__process_search_page(item,search_results),name=f'__process_search_page[{url}]'))
-                if isinstance(limit, int) and result_count >= limit:
-                    await wait_or_raise(tasks)                      
-                    return search_results  
-            await wait_or_raise(tasks) 
-            url = self.__getNextPageLink(response)        
+                await self.__process_search_page(item,search_results)
+                if isinstance(limit, int) and result_count >= limit:                                     
+                    return search_results              
+            url = self.__getNextPageLink(response)     
         response.release()
         return search_results    
 
@@ -126,11 +137,11 @@ class GithubClient:
     async def get_unique_nuget_configs(self, org, limit: Optional[int] = None) -> dict:
         """
         Returns a dict of nuget servers where the key is the server url and the value is the name given in the config
-        """
-        tasks = []
+        """        
         results = await self.search_nuget_configs(org, limit)  
-        configsByValue = {}    
+        configsByValue = {}
+        tasks = []
         for r in results:        
-            tasks.append(asyncio.create_task(self.__build_nuget_config(r, configsByValue),name=f'__build_nuget_config[{r.url}]'))
-        await wait_or_raise(tasks)
+            tasks.append(asyncio.create_task(self.__build_nuget_config(r, configsByValue),name=f'{r.url}'))
+        await asyncio.wait(tasks)
         return configsByValue

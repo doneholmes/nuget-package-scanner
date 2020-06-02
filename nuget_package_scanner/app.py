@@ -90,20 +90,14 @@ async def build_org_report(org:str, token: str) -> List[PackageContainer]:
 
         # Create Nuget client from discovered configs
         async with Nuget(client, configs) as n:              
-            # Find all projects with nuget packages
-            net_core_task = asyncio.create_task(g.search_netcore_csproj(org), name="Fetch Netcore Projects")            
-            net_framework_task = asyncio.create_task(g.search_package_configs(org), name="Fetch Netframework Projects")
-
-            # Note: When Github is having problems, this call can error
-            await wait_or_raise([net_core_task, net_framework_task])
-
-            core_projects: List[GithubSearchResult] = net_core_task.result()
+            # Find all projects with nuget packages.
+            # Note: These were originally concurrent calls, but the Github API forbids this
+            core_projects: List[GithubSearchResult] = await g.search_netcore_csproj(org)
             logging.info(f'Found {len(core_projects)} .Net Core projects to process.')
-            package_configs: List[GithubSearchResult] = net_framework_task.result()
+            package_configs: List[GithubSearchResult] = await g.search_package_configs(org)                                 
             logging.info(f'Found {len(package_configs)} legacy .Net Framework projects to process.')
 
-            # Fetch all project contents
-            # TODO: Potentially optimize by fetching packages as these come in
+            # Fetch all project contents            
             package_containers: List[PackageContainer] = []
             failed_projects: List[GithubSearchResult] = []
             fetch_project_tasks = []

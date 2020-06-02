@@ -46,7 +46,7 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
     1. Use the appropriate Nuget Server to fetch registration information for the package
 1. Generate and save CSV
 
-**Runtime Note**: The first (synchronous) version took about 3.5 minutes to run against my org (168 repositories w/ 100+ Nuget-referencing projects and ~2k individual package references. In the current (asynchronous) version, this entire process typically takes less than 20 seconds when there are no connectivity or server issues.
+**Runtime Note**: My org (168 repositories w/ 100+ Nuget-referencing projects and ~2k individual package references) can take around 2 minutes to fully process.
 
 ## Why did you write your own github client?
 

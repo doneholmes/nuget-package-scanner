@@ -43,7 +43,7 @@ class SmartClient:
         key = f'{u.scheme}{u.netloc}'        
         if self.clients.get(key) is None:
             conn = aiohttp.TCPConnector(limit=100) #TODO: Dial in pool size
-            timeout = aiohttp.ClientTimeout(total=60) #TODO: Dial in timeout
+            timeout = aiohttp.ClientTimeout(total=20) #TODO: Dial in timeout
             self.clients[key] = aiohttp.ClientSession(connector=conn,timeout=timeout)
         return self.clients[key]
     
@@ -78,7 +78,7 @@ class SmartClient:
             if ignore_404 and response.status == 404:
                 logging.debug(f'404 GET {url}')
                 return                    
-            if response.status != 200:
+            if response.status != 200:                
                 raise response.raise_for_status()            
             logging.debug(f'200 GET {url}')     
             return response        

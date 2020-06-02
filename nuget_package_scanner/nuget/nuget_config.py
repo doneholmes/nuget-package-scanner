@@ -12,7 +12,7 @@ class Package:
         self.name = name
         self.target_framework = target_framework
         self.version = version
-        self.version_date = "" # type: datetime
+        self.version_date = ""
         self.latest_release = "" # includes full release only   
         self.latest_release_date = ""
         self.latest_version = "" # includes prerelease and other builds

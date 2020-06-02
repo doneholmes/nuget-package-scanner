@@ -1,6 +1,7 @@
 # nuget-package-scanner
 ![PyPI](https://img.shields.io/pypi/v/nuget-package-scanner?color=green)
 ![PyPI - License](https://img.shields.io/pypi/l/nuget-package-scanner)
+![Python package](https://github.com/doneholmes/nuget-package-scanner/workflows/Python%20package/badge.svg?branch=master)
 
 nuget-package-scanner is a Python module that will query your Github organization for Nuget dependencies in your .Net projects and produce a report on how up-to-date they are. This can be useful for identifying which projects' dependencies are out of date (and how badly). It can also be useful for identifying how many disperate versions of the same common package is in use across your codebase (*cough... Newtonsoft.Json...cough*).
 

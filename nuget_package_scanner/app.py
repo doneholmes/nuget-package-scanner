@@ -13,7 +13,7 @@ from nuget_package_scanner.github_search import GithubClient, GithubSearchResult
 from nuget_package_scanner.nuget import NetCoreProject, Nuget, Package, PackageConfig, PackageContainer
 
 NAME = 'nuget-package-scanner'
-VERSION = '0.0.5'
+VERSION = '0.0.6'
 
 def enable_console_logging(level: int = logging.INFO):   
     logger = logging.getLogger()

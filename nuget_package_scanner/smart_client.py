@@ -6,7 +6,7 @@ import urllib.parse
 
 import aiohttp
 from async_lru import alru_cache
-from tenacity import retry, stop_after_attempt, wait_random
+from tenacity import before_log, retry, retry_if_exception_type, stop_after_attempt, wait_random, TryAgain
 
 
 class SmartClient:
@@ -67,9 +67,12 @@ class SmartClient:
         response = await self.get(url, ignore_404, headers)
         if response:
             async with response:      
-                return await response.json()    
+                return await response.json()            
 
-    @retry(stop=stop_after_attempt(3), wait=wait_random(min=1, max=2))
+    # Retry a few times in the event that it's some kind of connection error or 5xx error
+    # This method should not retry in the event of any 4xx errors
+    @retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(TryAgain), \
+        wait=wait_random(min=1, max=3), before=before_log(logging.getLogger(), logging.DEBUG))
     async def get(self, url: str, ignore_404 = True, headers: Optional[dict] = None) -> aiohttp.ClientResponse:             
         assert isinstance(url, str) and url, "url must be a non-empty string"
         client = self.get_aiohttp_client(url)
@@ -77,12 +80,12 @@ class SmartClient:
             response = await client.get(url,headers=headers)
             if ignore_404 and response.status == 404:
                 logging.debug(f'404 GET {url}')
-                return                    
-            if response.status != 200:                
+                return            
+            if response.status != 200:             
                 raise response.raise_for_status()            
             logging.debug(f'200 GET {url}')     
             return response        
         except aiohttp.ClientResponseError as e:            
             logging.exception(e)
-            raise
+            raise e if e.status < 500 else TryAgain # Explicit call to retry for 5xx errors
 

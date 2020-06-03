@@ -52,14 +52,6 @@ Currently, results are saved to a csv file that can be imported into a spreadshe
 
 **Runtime Note**: My org (168 repositories w/ 100+ Nuget-referencing projects and ~2k individual package references) can take around 2 minutes to fully process.
 
-## Why did you write your own github client?
-
-I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithub). I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. This also gave me a chance to familiarize a bit more with the Github API. I wanted to use the [Github GraphQL API](https://developer.github.com/v4/) for this, but it doesn't support code search as of yet. If I need to support any more-complicated use cases, I will look at switching back to PyGithub.
-
-## Why did you write this in Python? Nuget only supports .Net.
-
-I wanted to learn something new and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.
-
 ## TODOs
 - [X] Shared session(s) in web requests to support connection pooling and boost performance
 - [X] More resilliancy in web call timeout errors. Currently, any timeout crashes things.
@@ -68,3 +60,12 @@ I wanted to learn something new and Python is new to me. This project seemed lik
 - [ ] [Rate limiting checks](https://developer.github.com/v3/#rate-limiting) on calls to the github api. When searching within a very large github org, there is the possiblity that the [search api rate limit](https://developer.github.com/v3/search/#rate-limit) budget could be exhausted (currently 30 calls/minute if authenticated)
 - [ ] Possibly break out the nuget module into a stand-alone Python package. I'm not sure if there's any use beyond basic GET functionality.
 - [ ] Optimizing json object scanning algorhithms. It's currently a very simple brute force approach. This may be a lot of work for little gain.
+
+## You may be wondering...
+### Why did you write your own github client?
+
+I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithub). I couldn't get it working correctly with my personal acccess token, so I wrote a simple client of my own. This also gave me a chance to familiarize a bit more with the Github API. I wanted to use the [Github GraphQL API](https://developer.github.com/v4/) for this, but it doesn't support code search as of yet. If I need to support any more-complicated use cases, I will look at switching back to PyGithub.
+
+### Why did you write this in Python? Nuget only supports .Net.
+
+I wanted to learn something new and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.

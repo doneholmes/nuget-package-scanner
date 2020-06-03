@@ -39,16 +39,12 @@ class GithubClient:
         print(f'Search API Reset: { search_reset }')        
     
     async def get_request_as_text(self, url: str) -> str:
-        async with await self.makeRequest(url) as response:
-            return await response.text() 
+        async with await self.makeRequest(url) as response:            
+            return await response.text() #TODO There is an occassional issue with reading the response            
 
     async def get_request_as_json(self, url: str) -> dict:
-        async with await self.makeRequest(url) as response:
-            try: #TODO There is an occassional issue with reading the response
-                return await response.json()
-            except Exception as e:
-                logging.warning(f'Failed to retrieve json for {url}')
-                logging.exception(e)
+        async with await self.makeRequest(url) as response:            
+            return await response.json()                                            
 
     async def makeRequest(self, url) -> aiohttp.ClientResponse:        
         response = await self.__client.get(url, False, self.headers)        
@@ -73,11 +69,15 @@ class GithubClient:
         name = item_json["name"]
         repo_name = item_json["repository"]["name"]
         path = item_json["path"]        
-        details_url = item_json["url"]        
-        details = await self.get_request_as_json(details_url)
+        details_url = item_json["url"]
+        try:     
+            details = await self.get_request_as_json(details_url)
+        except aiohttp.ClientPayloadError:
+            # https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientPayloadError
+            logging.warning(f'Failed to read (and therefore skipped) details_url json for search result response {details_url}')
         if details:
             sourceUrl = details["download_url"]                                  
-            results.append(GithubSearchResult(name, repo_name, path, sourceUrl))            
+            results.append(GithubSearchResult(name, repo_name, path, sourceUrl))     
     
     async def search_github_code(self, query, limit: Optional[int] = None) -> List[GithubSearchResult]:
         """ 
@@ -100,7 +100,8 @@ class GithubClient:
         result_count = 0
         while url:
             logging.info(f'Github Search Query: {url}')
-            #TODO: Rate limiting checking while running
+            #TODO: Bettter limiting checking while running. Currently, this will just bomb when the client
+            # throws an exception.
             response = await self.makeRequest(url)         
             results = await response.json()            
 
@@ -125,8 +126,12 @@ class GithubClient:
     async def search_package_configs(self, org, limit: Optional[int] = None) -> List[GithubSearchResult]:
         return await self.search_github_code(f'package+org:{org}+filename:packages.config', limit)   
     
-    async def __build_nuget_config(self, result: GithubSearchResult, configs: dict) -> None:        
-        source = await self.get_request_as_text(result.url)        
+    async def __build_nuget_config(self, result: GithubSearchResult, configs: dict) -> None:
+        try:      
+            source = await self.get_request_as_text(result.url)
+        except aiohttp.ClientPayloadError:
+            # https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientPayloadError
+            logging.warning(f'Failed to read (and therefore skipped) nuget.config source from {result.url}')
         nc = NugetConfig(source)
         for i in nc.indexes:
             v = nc.indexes[i]

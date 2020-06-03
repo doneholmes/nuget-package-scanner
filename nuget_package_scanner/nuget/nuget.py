@@ -40,13 +40,11 @@ class Nuget:
         self._client = client  
     
     async def initialize_clients(self):          
-        clients = await self.__get_clients()        
-        for c in clients:
-            logging.info(f'Initialized Nuget Server API @ {c.index_url}')    
+        await self.__get_clients()    
 
     async def __get_clients(self):
         if self._clients_cache:
-            return self._clients_cache        
+            return self._clients_cache     
         self._clients_cache.append(await NugetServer.create(self._client)) # ensuring that nuget.org is added first
         for c in self._configs:
             self._clients_cache.append(await NugetServer.create(self._client,c))

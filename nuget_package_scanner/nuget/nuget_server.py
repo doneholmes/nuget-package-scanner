@@ -1,3 +1,5 @@
+import logging
+
 from .registrations import Registrations
 from ..smart_client import SmartClient
 
@@ -23,10 +25,11 @@ class NugetServer:
         API and the urls used to access them.
         """    
         self = NugetServer()
-        self.__client: SmartClient = client 
-        await self.__fetch_base_urls(service_index_url)          
-        return self    
-
+        self.__client: SmartClient = client
+        logging.info(f'Initializing Nuget Server API @ { service_index_url }')
+        await self.__fetch_base_urls(service_index_url)
+        return self
+        
     async def __fetch_base_urls(self, service_index_url):  
         self.index_url = service_index_url
         json = await self.__client.get_as_json(service_index_url)                   

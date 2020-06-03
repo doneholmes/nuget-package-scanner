@@ -72,12 +72,14 @@ class GithubClient:
         details_url = item_json["url"]
         try:     
             details = await self.get_request_as_json(details_url)
+            if details:
+                sourceUrl = details["download_url"]                                  
+                results.append(GithubSearchResult(name, repo_name, path, sourceUrl))  
+        except asyncio.exceptions.TimeoutError:
+            logging.warning(f'Skipped: Timed out attempting to fetch details_url json for search result response {details_url}')
         except aiohttp.ClientPayloadError:
             # https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientPayloadError
-            logging.warning(f'Failed to read (and therefore skipped) details_url json for search result response {details_url}')
-        if details:
-            sourceUrl = details["download_url"]                                  
-            results.append(GithubSearchResult(name, repo_name, path, sourceUrl))     
+            logging.warning(f'Skipped: Failed to read details_url json for search result response {details_url}')           
     
     async def search_github_code(self, query, limit: Optional[int] = None) -> List[GithubSearchResult]:
         """ 
@@ -128,16 +130,17 @@ class GithubClient:
     
     async def __build_nuget_config(self, result: GithubSearchResult, configs: dict) -> None:
         try:      
-            source = await self.get_request_as_text(result.url)
+            source = await self.get_request_as_text(result.url)            
+            nc = NugetConfig(source)
+            for i in nc.indexes:
+                v = nc.indexes[i]
+                if not configs.get(v):
+                    configs[v] = i        
+        except asyncio.exceptions.TimeoutError:
+            logging.warning(f'Skipped: Timed out attempting to fetch nuget.config source {result.url}')
         except aiohttp.ClientPayloadError:
             # https://docs.aiohttp.org/en/stable/client_reference.html#aiohttp.ClientPayloadError
-            logging.warning(f'Failed to read (and therefore skipped) nuget.config source from {result.url}')
-        nc = NugetConfig(source)
-        for i in nc.indexes:
-            v = nc.indexes[i]
-            if not configs.get(v):
-                configs[v] = i        
-        return
+            logging.warning(f'Skipped: Failed to read nuget.config source from {result.url}')        
         
     async def get_unique_nuget_configs(self, org, limit: Optional[int] = None) -> dict:
         """

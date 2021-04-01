@@ -68,4 +68,4 @@ I originally tried to make use of [PyGithub](https://github.com/PyGithub/PyGithu
 
 ### Why did you write this in Python? Nuget only supports .Net.
 
-I wanted to learn something new and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have leared as much in the process.
+I wanted to learn something new and Python is new to me. This project seemed like a good use case for the high-level scripting support available in Python. I could have written this in C#, but I wouldn't have learned as much in the process.

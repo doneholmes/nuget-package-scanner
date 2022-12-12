@@ -25,7 +25,7 @@ packaging==20.4
 pkginfo==1.5.0.1
 pluggy==0.13.1
 py==1.8.1
-pycares==3.1.1
+pycares==4.3.0
 pycparser==2.20
 Pygments==2.6.1
 pylint==2.5.2
